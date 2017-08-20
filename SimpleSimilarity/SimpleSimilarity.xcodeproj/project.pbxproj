@@ -21,6 +21,7 @@
 		950EF2E31F49EA2C00174155 /* SimpleSimilarityFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 950EF2CE1F49EA2C00174155 /* SimpleSimilarityFramework.framework */; };
 		950EF2E41F49EA2C00174155 /* SimpleSimilarityFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 950EF2CE1F49EA2C00174155 /* SimpleSimilarityFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		950EF2ED1F49EAF100174155 /* TextualDataImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950EF2EC1F49EAF100174155 /* TextualDataImport.swift */; };
+		950EF2F41F49F4F300174155 /* sample.csv in Resources */ = {isa = PBXBuildFile; fileRef = 950EF2F31F49F4E600174155 /* sample.csv */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -97,6 +98,7 @@
 		950EF2DD1F49EA2C00174155 /* SimpleSimilarityFrameworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSimilarityFrameworkTests.swift; sourceTree = "<group>"; };
 		950EF2DF1F49EA2C00174155 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		950EF2EC1F49EAF100174155 /* TextualDataImport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextualDataImport.swift; sourceTree = "<group>"; };
+		950EF2F31F49F4E600174155 /* sample.csv */ = {isa = PBXFileReference; lastKnownFileType = file; name = sample.csv; path = Resources/sample.csv; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -209,6 +211,7 @@
 		950EF2DC1F49EA2C00174155 /* SimpleSimilarityFrameworkTests */ = {
 			isa = PBXGroup;
 			children = (
+				950EF2F31F49F4E600174155 /* sample.csv */,
 				950EF2DD1F49EA2C00174155 /* SimpleSimilarityFrameworkTests.swift */,
 				950EF2DF1F49EA2C00174155 /* Info.plist */,
 			);
@@ -410,6 +413,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				950EF2F41F49F4F300174155 /* sample.csv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
