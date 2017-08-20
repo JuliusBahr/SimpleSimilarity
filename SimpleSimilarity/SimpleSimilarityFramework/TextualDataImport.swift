@@ -47,7 +47,18 @@ struct CSVImport: TextualDataImport {
 
     func loadFile(at fileName: String) throws {
         if FileManager.default.fileExists(atPath: fileName) {
-            let fileContents = FileManager.default.contents(atPath: fileName)
+
+            let fileContents = try? String(contentsOfFile: fileName)
+
+            if let fileContents = fileContents {
+                let lines = fileContents.split(separator: "\n")
+                lines.forEach({ (line) in
+                    let columns = line.split(separator: ";")
+                    columns.forEach({ (column) in
+                        debugPrint(column)
+                    })
+                })
+            }
             
         } else {
             throw FileReadError()
