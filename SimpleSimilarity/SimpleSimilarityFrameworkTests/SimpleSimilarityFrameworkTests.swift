@@ -22,8 +22,18 @@ class SimpleSimilarityFrameworkTests: XCTestCase {
     }
     
     func testCsvImport() {
+        guard let csvPath = Bundle.main.path(forResource: "sample", ofType: "csv") else {
+            XCTFail("CSV file could not be read.")
+            return
+        }
+
         let csvImporter = CSVImport()
-        Bundle.main.path(forResource: "sample", ofType: "csv")
+        do {
+            try csvImporter.loadFile(at: csvPath)
+        } catch {
+            XCTFail("Reading the csv file caused an exception.")
+        }
+
     }
     
 }
