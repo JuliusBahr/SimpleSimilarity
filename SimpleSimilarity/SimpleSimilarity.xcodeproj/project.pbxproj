@@ -22,6 +22,7 @@
 		950EF2E41F49EA2C00174155 /* SimpleSimilarityFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 950EF2CE1F49EA2C00174155 /* SimpleSimilarityFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		950EF2ED1F49EAF100174155 /* TextualDataImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950EF2EC1F49EAF100174155 /* TextualDataImport.swift */; };
 		950EF2F91F49FA5000174155 /* sample.csv in Resources */ = {isa = PBXBuildFile; fileRef = 950EF2F81F49FA4800174155 /* sample.csv */; };
+		9552E8871F6E98F1001CA2BF /* MatchingEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9552E8861F6E98F1001CA2BF /* MatchingEngine.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -99,6 +100,7 @@
 		950EF2DF1F49EA2C00174155 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		950EF2EC1F49EAF100174155 /* TextualDataImport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextualDataImport.swift; sourceTree = "<group>"; };
 		950EF2F81F49FA4800174155 /* sample.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = sample.csv; sourceTree = "<group>"; };
+		9552E8861F6E98F1001CA2BF /* MatchingEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingEngine.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -205,6 +207,7 @@
 				950EF2D01F49EA2C00174155 /* SimpleSimilarityFramework.h */,
 				950EF2D11F49EA2C00174155 /* Info.plist */,
 				950EF2EC1F49EAF100174155 /* TextualDataImport.swift */,
+				9552E8861F6E98F1001CA2BF /* MatchingEngine.swift */,
 			);
 			path = SimpleSimilarityFramework;
 			sourceTree = "<group>";
@@ -458,6 +461,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9552E8871F6E98F1001CA2BF /* MatchingEngine.swift in Sources */,
 				950EF2ED1F49EAF100174155 /* TextualDataImport.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -815,6 +819,7 @@
 				950EF2C21F49E9B400174155 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		950EF2C31F49E9B400174155 /* Build configuration list for PBXNativeTarget "SimpleSimilarityTests" */ = {
 			isa = XCConfigurationList;
@@ -823,6 +828,7 @@
 				950EF2C51F49E9B400174155 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		950EF2C61F49E9B400174155 /* Build configuration list for PBXNativeTarget "SimpleSimilarityUITests" */ = {
 			isa = XCConfigurationList;
@@ -831,6 +837,7 @@
 				950EF2C81F49E9B400174155 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		950EF2E51F49EA2C00174155 /* Build configuration list for PBXNativeTarget "SimpleSimilarityFramework" */ = {
 			isa = XCConfigurationList;
@@ -839,6 +846,7 @@
 				950EF2E71F49EA2C00174155 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		950EF2E91F49EA2C00174155 /* Build configuration list for PBXNativeTarget "SimpleSimilarityFrameworkTests" */ = {
 			isa = XCConfigurationList;
@@ -847,6 +855,7 @@
 				950EF2EB1F49EA2C00174155 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
