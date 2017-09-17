@@ -29,7 +29,7 @@ protocol TextualDataImport {
     ///
     /// - Parameter fileName: this file is being read
     /// - Throws: a FileReadError error when loading the file fails
-    func loadFile(at fileName: String) throws
+    mutating func loadFile(at fileName: String) throws
 
     /// The contents of the file that has been loaded
     /// - Precondition: a file must have been loaded before
@@ -45,20 +45,27 @@ struct CSVImport: TextualDataImport {
         }
     }
 
-    func loadFile(at fileName: String) throws {
+    mutating func loadFile(at fileName: String) throws {
         if FileManager.default.fileExists(atPath: fileName) {
 
             let fileContents = try? String(contentsOfFile: fileName)
+            var parsedFileContents:[TextualData] = []
 
             if let fileContents = fileContents {
                 let lines = fileContents.split(separator: "\n")
                 lines.forEach({ (line) in
                     let columns = line.split(separator: ";")
-                    columns.forEach({ (column) in
-                        debugPrint(column)
-                    })
+                    if columns.count > 1 {
+                        parsedFileContents.append(TextualData(inputString: String(columns[0]), origin: String(columns[1])))
+                    }
                 })
             }
+
+            guard !parsedFileContents.isEmpty else {
+                throw FileReadError()
+            }
+
+            csvFileContents = parsedFileContents
             
         } else {
             throw FileReadError()

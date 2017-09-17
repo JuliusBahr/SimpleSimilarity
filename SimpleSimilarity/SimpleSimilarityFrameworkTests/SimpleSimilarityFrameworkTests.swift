@@ -27,7 +27,7 @@ class SimpleSimilarityFrameworkTests: XCTestCase {
             return
         }
 
-        let csvImporter = CSVImport()
+        var csvImporter = CSVImport()
         do {
             try csvImporter.loadFile(at: csvPath)
         } catch {
@@ -42,13 +42,17 @@ class SimpleSimilarityFrameworkTests: XCTestCase {
             return
         }
 
-        let csvImporter = CSVImport()
+        var csvImporter = CSVImport()
         do {
             try csvImporter.loadFile(at: csvPath)
         } catch {
             XCTFail("Reading the csv file caused an exception.")
         }
 
+        XCTAssertNotNil(csvImporter.fileContents)
+
+        XCTAssertEqual(csvImporter.fileContents?.first?.inputString, "String")
+        XCTAssertEqual(csvImporter.fileContents?.first?.origin, "Origin")
     }
     
 }
