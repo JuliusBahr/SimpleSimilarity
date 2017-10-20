@@ -10,10 +10,10 @@ import Foundation
 
 
 /// Error object thrown when reading a file fails
-struct FileReadError: Error {}
+public struct FileReadError: Error {}
 
 /// Data structure for a single textual input
-struct TextualData {
+public struct TextualData {
     /// The input string
     let inputString: String
 
@@ -23,7 +23,7 @@ struct TextualData {
 
 
 /// Base protocol used by objects that load data for the textual similarity search
-protocol TextualDataImport {
+public protocol TextualDataImport {
 
     /// Load's the content of the given file
     ///
@@ -36,16 +36,20 @@ protocol TextualDataImport {
     var fileContents: [TextualData]? {get}
 }
 
-struct CSVImport: TextualDataImport {
+public struct CSVImport: TextualDataImport {
+    public init() {
+        
+    }
+
     fileprivate var csvFileContents: [TextualData]?
 
-    var fileContents: [TextualData]? {
+    public var fileContents: [TextualData]? {
         get {
             return csvFileContents
         }
     }
 
-    mutating func loadFile(at fileName: String) throws {
+    public mutating func loadFile(at fileName: String) throws {
         if FileManager.default.fileExists(atPath: fileName) {
 
             let fileContents = try? String(contentsOfFile: fileName)

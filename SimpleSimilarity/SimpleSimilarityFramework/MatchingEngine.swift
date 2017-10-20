@@ -9,37 +9,54 @@
 import Foundation
 
 /// Error object thrown when the matching engine has not been filled with textual data
-struct MatchingEngineNotFilledError: Error {}
-
+public struct MatchingEngineNotFilledError: Error {}
 
 /// The result for a given query
-struct Result {
+public struct Result {
     let textualResult: TextualData
     let quality: UInt
 }
 
-class MatchingEngine {
+open class MatchingEngine {
 
     fileprivate var isFilled = false
+
+    public init() {
+        
+    }
 
     /// - Returns: a normalized represenation of the text corpus
     /// - Throws: a MatchingEngineNotFilledError when normalizedRepresentation() is called before fillMatchingEngine()
     /// - Precondition: you must first call fillMatchingEngine()
-    func normalizedRepresentation() throws -> [TextualData]  {
+    open func normalizedRepresentation() throws -> [TextualData]  {
         return []
     }
 
-    func fillMatchingEngine(with corpus:[TextualData], completion:() -> Void) {
+    open func fillMatchingEngine(with corpus:[TextualData], completion: @escaping () -> Void) {
+        print("Filling matching engine")
+
         DispatchQueue.global().async {
+            var processedCorpus:[String] = []
+
             let stemmer = NSLinguisticTagger(tagSchemes: [.lemma], options: 0)
 
-            corpus.forEach({ (textualData) in
-                let stemmedWords = stemmer.tags(in: NSRange(location: 0, length: textualData.inputString.count-1), unit: .sentence, scheme: .lemma, options: [.omitWhitespace, .omitOther, .omitPunctuation], tokenRanges: nil)
-            })
             // stem words
+            corpus.forEach({ (textualData) in
+                print("Starting stem")
+                var tokenRanges: NSArray?
+                stemmer.string = textualData.inputString
+                let stemmedWords = stemmer.tags(in: NSRange(location: 0, length: textualData.inputString.utf16.count), unit: .sentence, scheme: .lemma, options: [.omitWhitespace, .omitOther, .omitPunctuation], tokenRanges: &tokenRanges)
+                stemmedWords.forEach({ (tag) in
+                    print(tag.rawValue)
+                })
+
+                print("\n")
+            })
             // remove infrequent and frequent words
             // sort string
+            self.isFilled = true
 
+            completion()
         }
     }
 
@@ -50,7 +67,7 @@ class MatchingEngine {
     ///   - resultFound: closure that is called once the best result is found
     /// - Throws: a MatchingEngineNotFilledError when bestResult() is called before fillMatchingEngine()
     /// - Precondition: you must first call fillMatchingEngine()
-    func bestResult(for query:TextualData, resultFound:() -> Result) throws {
+    open func bestResult(for query:TextualData, resultFound:() -> Result) throws {
     }
 
 }

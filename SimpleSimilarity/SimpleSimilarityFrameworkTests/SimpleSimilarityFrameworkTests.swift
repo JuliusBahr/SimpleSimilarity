@@ -53,6 +53,7 @@ class SimpleSimilarityFrameworkTests: XCTestCase {
 
         XCTAssertEqual(csvImporter.fileContents?.first?.inputString, "String")
         XCTAssertEqual(csvImporter.fileContents?.first?.origin, "Origin")
+        XCTAssertEqual(csvImporter.fileContents?[1].inputString, "The quick brown fox jumped over the bridge")
+        XCTAssertEqual(csvImporter.fileContents?[1].origin, "Book")
     }
-    
 }
