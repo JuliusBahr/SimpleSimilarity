@@ -17,9 +17,16 @@ public struct Result {
     let quality: UInt
 }
 
+fileprivate struct CorpusEntry {
+    let textualData: TextualData
+    let bagOfWords: Set<String>
+}
+
 open class MatchingEngine {
 
     fileprivate var isFilled = false
+
+    fileprivate var allWords: NSCountedSet = NSCountedSet()
 
     public init() {
         
@@ -36,21 +43,20 @@ open class MatchingEngine {
         print("Filling matching engine")
 
         DispatchQueue.global().async {
-            var processedCorpus:[String] = []
+            var processedCorpus:[CorpusEntry] = []
 
             let stemmer = NSLinguisticTagger(tagSchemes: [.lemma], options: 0)
 
             // stem words
             corpus.forEach({ (textualData) in
-                print("Starting stem")
                 var tokenRanges: NSArray?
                 stemmer.string = textualData.inputString
-                let stemmedWords = stemmer.tags(in: NSRange(location: 0, length: textualData.inputString.utf16.count), unit: .sentence, scheme: .lemma, options: [.omitWhitespace, .omitOther, .omitPunctuation], tokenRanges: &tokenRanges)
+                let stemmedWords = stemmer.tags(in: NSRange(location: 0, length: textualData.inputString.utf16.count), unit: .word, scheme: .lemma, options: [.omitWhitespace, .omitOther, .omitPunctuation], tokenRanges: &tokenRanges)
+
                 stemmedWords.forEach({ (tag) in
-                    print(tag.rawValue)
+                    //tag.rawValue
                 })
 
-                print("\n")
             })
             // remove infrequent and frequent words
             // sort string
