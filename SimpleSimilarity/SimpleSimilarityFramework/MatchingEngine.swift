@@ -63,6 +63,7 @@ open class MatchingEngine {
 
             })
             // determine frequent and infrequent words
+            let stopwords = self.determineFrequentAndInfrequentWords(in: self.allWords)
             // remove infrequent and frequent words
             self.isFilled = true
 
@@ -70,7 +71,7 @@ open class MatchingEngine {
         }
     }
 
-    fileprivate func determineFrequentAndInfrequentWords(in set:NSCountedSet) -> Set<String> {
+    func determineFrequentAndInfrequentWords(in set:NSCountedSet) -> Set<String> {
         var maxCount = 0
         var minCount = Int.max
         var medianCount = 0
@@ -80,7 +81,7 @@ open class MatchingEngine {
         var stringCounts: [Int] = []
 
         set.objectEnumerator().allObjects.forEach { (string) in
-            let stringCount = allWords.count(for: string)
+            let stringCount = set.count(for: string)
             if stringCount > maxCount {
                 maxCount = stringCount
             }
@@ -105,7 +106,7 @@ open class MatchingEngine {
                 return
             }
 
-            let stringCount = allWords.count(for: string)
+            let stringCount = set.count(for: string)
             if stringCount > cutOffTop || stringCount < cutOffBottom {
                 stringsToRemove.insert(string as! String)
             }
