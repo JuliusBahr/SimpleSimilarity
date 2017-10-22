@@ -17,6 +17,8 @@ public struct Result {
     let quality: UInt
 }
 
+/// A processed entry in the corpus
+/// It contains the source string and the preprocessed representaion
 fileprivate struct CorpusEntry {
     let textualData: TextualData
     let bagOfWords: Set<String>
@@ -26,6 +28,7 @@ open class MatchingEngine {
 
     fileprivate var isFilled = false
 
+    /// All words in the corpus with their occurence
     fileprivate var allWords: NSCountedSet = NSCountedSet()
 
     public init() {
@@ -98,7 +101,9 @@ open class MatchingEngine {
         let midIndex = Int(floor(stringCount/2.0))
         medianCount = sortedStringCounts[midIndex]
 
+        // the top 5% of words are considered frequent
         let cutOffTop = Int(floor(Double(maxCount) * 0.95))
+        // the bottom 5% of words are considered infrequent
         let cutOffBottom = Int(floor(Double(maxCount) * 0.05))
 
         set.objectEnumerator().allObjects.forEach { (string) in

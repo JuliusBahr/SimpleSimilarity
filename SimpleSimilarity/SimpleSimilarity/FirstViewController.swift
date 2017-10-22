@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SimpleSimilarityFramework
 
 class FirstViewController: UIViewController {
 
