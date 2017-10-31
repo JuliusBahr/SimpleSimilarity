@@ -26,7 +26,7 @@ fileprivate struct CorpusEntry {
 
 open class MatchingEngine {
 
-    fileprivate var isFilled = false
+    public private(set) var isFilled = false
 
     /// All words in the corpus with their occurence
     fileprivate var allWords: NSCountedSet = NSCountedSet()
