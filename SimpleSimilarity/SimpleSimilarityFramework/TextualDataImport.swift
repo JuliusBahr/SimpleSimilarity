@@ -13,12 +13,35 @@ import Foundation
 public struct FileReadError: Error {}
 
 /// Data structure for a single textual input
-public struct TextualData {
+public struct TextualData: Hashable {
     /// The input string
     let inputString: String
 
     /// The origin where this string is found. I.e. a book or a webpage or software
     let origin: String?
+    
+    public var hashValue: Int {
+        if let origin = origin {
+            return origin.appending(inputString).hashValue
+        } else {
+            return inputString.hashValue
+        }
+    }
+    
+    public static func ==(lhs: TextualData, rhs: TextualData) -> Bool {
+        var lhsText = lhs.inputString
+        var rhsText = rhs.inputString
+        
+        if let lhsOrigin = lhs.origin {
+            lhsText = lhsText.appending(lhsOrigin)
+        }
+        
+        if let rhsOrigin = rhs.origin {
+            rhsText = rhsOrigin.appending(rhsOrigin)
+        }
+        
+        return lhsText == rhsText
+    }
 }
 
 

@@ -11,6 +11,9 @@ import Foundation
 /// Error object thrown when the matching engine has not been filled with textual data
 public struct MatchingEngineNotFilledError: Error {}
 
+/// Error object thrown when a parameter value is not within valid bounds
+public struct InvalidArgumentValueError: Error {}
+
 /// The result for a given query
 public struct Result {
     let textualResult: TextualData
@@ -19,9 +22,22 @@ public struct Result {
 
 /// A processed entry in the corpus
 /// It contains the source string and the preprocessed representaion
-fileprivate struct CorpusEntry {
+fileprivate class CorpusEntry: Hashable {
     let textualData: TextualData
-    let bagOfWords: Set<String>
+    var bagOfWords: Set<String>
+    
+    init(textualData: TextualData, bagOfWords: Set<String>) {
+        self.textualData = textualData
+        self.bagOfWords = bagOfWords
+    }
+    
+    var hashValue: Int {
+        return textualData.hashValue
+    }
+    
+    static func ==(lhs: CorpusEntry, rhs: CorpusEntry) -> Bool {
+        return lhs.textualData == rhs.textualData
+    }
 }
 
 open class MatchingEngine {
@@ -30,6 +46,7 @@ open class MatchingEngine {
 
     /// All words in the corpus with their occurence
     fileprivate var allWords: NSCountedSet = NSCountedSet()
+    fileprivate var corpus: Set<CorpusEntry> = Set()
 
     public init() {
         
@@ -43,10 +60,8 @@ open class MatchingEngine {
     }
 
     open func fillMatchingEngine(with corpus:[TextualData], completion: @escaping () -> Void) {
-        print("Filling matching engine")
-
         DispatchQueue.global().async {
-            var processedCorpus:[CorpusEntry] = []
+            var processedCorpus: Set<CorpusEntry> = Set()
 
             let stemmer = NSLinguisticTagger(tagSchemes: [.lemma], options: 0)
 
@@ -63,12 +78,22 @@ open class MatchingEngine {
                     bagOfWords.insert(tag.rawValue)
                     self.allWords.add(tag.rawValue)
                 })
+                
+                let newEntry = CorpusEntry(textualData: textualData, bagOfWords: bagOfWords)
 
+                processedCorpus.insert(newEntry)
             })
+            
             // determine frequent and infrequent words
             let stopwords = self.determineFrequentAndInfrequentWords(in: self.allWords)
+            
             // remove infrequent and frequent words
+            processedCorpus.forEach({ (corpusEntry) in
+                corpusEntry.bagOfWords = corpusEntry.bagOfWords.subtracting(stopwords)
+            })
+            
             self.isFilled = true
+            self.corpus = processedCorpus
 
             completion()
         }
@@ -123,11 +148,24 @@ open class MatchingEngine {
     /// Get the best result for the given query
     ///
     /// - Parameters:
-    ///   - query: the query object for which the best match in the mathing engine is retrieved
+    ///   - query: the query object for which the best match in the matching engine is retrieved
+    ///   - exhaustive: the whole textual corpus is scanned, if is false only the first best match is returned
     ///   - resultFound: closure that is called once the best result is found
     /// - Throws: a MatchingEngineNotFilledError when bestResult() is called before fillMatchingEngine()
     /// - Precondition: you must first call fillMatchingEngine()
-    open func bestResult(for query:TextualData, resultFound:() -> Result) throws {
+    open func bestResult(for query: TextualData, exhaustive: Bool, resultFound:() -> Result?) throws {
+    }
+    
+    /// Get's the best results for a given query
+    ///
+    /// - Parameters:
+    ///   - betterThan: the threshold for the quality of results. Valid results are within in 0.0 and 1.0
+    ///   - query: the query object for which the best match in the matching engine is retrieved
+    ///   - resultsFound: closure called when the matches with a quality higher than betterThan are found
+    /// - Throws: a MatchingEngineNotFilledError when bestResult() is called before fillMatchingEngine(), a InvalidArgumentValueError when betterThan has an illegal value
+    /// - Precondition: you must first call fillMatchingEngine()
+    open func result(betterThan: Float, for query: String, resultsFound:() -> [Result]?) throws {
+        
     }
 
 }
