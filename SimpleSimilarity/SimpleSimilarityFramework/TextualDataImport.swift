@@ -13,7 +13,7 @@ import Foundation
 public struct FileReadError: Error {}
 
 /// Data structure for a single textual input
-public struct TextualData {
+public struct TextualData: Hashable {
     /// The input string
     public let inputString: String
 
