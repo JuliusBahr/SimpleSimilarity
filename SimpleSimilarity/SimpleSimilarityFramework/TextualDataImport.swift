@@ -15,10 +15,10 @@ public struct FileReadError: Error {}
 /// Data structure for a single textual input
 public struct TextualData {
     /// The input string
-    let inputString: String
+    public let inputString: String
 
     /// The origin where this string is found. I.e. a book or a webpage or software
-    let origin: String?
+    public let origin: String?
 }
 
 
