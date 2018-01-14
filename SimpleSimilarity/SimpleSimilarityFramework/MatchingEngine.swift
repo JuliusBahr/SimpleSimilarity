@@ -22,18 +22,27 @@ public struct Result {
 
 /// A processed entry in the corpus
 /// It contains the source string and the preprocessed representaion
-public struct CorpusEntry {
-    public let textualData: TextualData
-    public var bagOfWords: Set<String>
+open class CorpusEntry: Hashable {
+    let textualData: TextualData
+    var bagOfWords: Set<String>
+    
+    init(textualData: TextualData, bagOfWords: Set<String>) {
+        self.textualData = textualData
+        self.bagOfWords = bagOfWords
+    }
+    
+    public var hashValue: Int {
+        return textualData.hashValue
+    }
+    
+    public static func ==(lhs: CorpusEntry, rhs: CorpusEntry) -> Bool {
+        return lhs.textualData == rhs.textualData
+    }
 }
 
 open class MatchingEngine {
 
-    fileprivate var isFilled = false
-    
-    fileprivate var inputCorpus: [CorpusEntry] = []
-    // The processed representation of the textual corpus. Here the preprocessing steps of lemmatization and stopword removal have been applied
-    fileprivate var processedCorpus: [CorpusEntry] = []
+    public private(set) var isFilled = false
 
     /// All words in the corpus with their occurence
     fileprivate var allWords: NSCountedSet = NSCountedSet()
@@ -52,7 +61,8 @@ open class MatchingEngine {
 
     open func fillMatchingEngine(with corpus:[TextualData], completion: @escaping () -> Void) {
         DispatchQueue.global().async {
-            
+            var processedCorpus: Set<CorpusEntry> = Set()
+
             let stemmer = NSLinguisticTagger(tagSchemes: [.lemma], options: 0)
 
             // stem words
@@ -71,14 +81,16 @@ open class MatchingEngine {
                 
                 let newEntry = CorpusEntry(textualData: textualData, bagOfWords: bagOfWords)
 
-                self.inputCorpus.append(CorpusEntry(textualData: textualData, bagOfWords: bagOfWords))
+                processedCorpus.insert(newEntry)
             })
             
             // determine frequent and infrequent words
             let stopwords = self.determineFrequentAndInfrequentWords(in: self.allWords)
             
             // remove infrequent and frequent words
-            self.processedCorpus = self.remove(stopwords: stopwords, from: self.inputCorpus)
+            processedCorpus.forEach({ (corpusEntry) in
+                corpusEntry.bagOfWords = corpusEntry.bagOfWords.subtracting(stopwords)
+            })
             
             self.isFilled = true
             self.corpus = processedCorpus
@@ -131,26 +143,6 @@ open class MatchingEngine {
         }
 
         return stringsToRemove
-    }
-    
-    func remove(stopwords: Set<String>, from corpus:[CorpusEntry]) -> [CorpusEntry] {
-        guard !stopwords.isEmpty || !corpus.isEmpty else {
-            return corpus
-        }
-        
-        var processedCorpus: [CorpusEntry] = []
-        
-        for var corpusEntry in corpus {
-            guard !corpusEntry.bagOfWords.isEmpty else {
-                continue
-            }
-            
-            corpusEntry.bagOfWords.subtract(stopwords)
-            
-            processedCorpus.append(corpusEntry)
-        }
-        
-        return processedCorpus
     }
 
     /// Get the best result for the given query

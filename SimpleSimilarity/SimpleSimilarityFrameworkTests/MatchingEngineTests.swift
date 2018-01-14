@@ -75,25 +75,4 @@ class MatchingEngineTests: XCTestCase {
         XCTAssert(commonWords.isEmpty)
     }
     
-    func testStopwordRemovalWhereStopwordsAreContained() {
-        let matchingEngine = MatchingEngine()
-        
-        let stopwords: Set = ["remove", "this"]
-        
-        let textualData1 = TextualData(inputString: "We want to remove this", origin: nil)
-        let bagOfWords1: Set = ["we", "want", "to", "remove", "this"]
-        
-        let textualData2 = TextualData(inputString: "There is nothing to remove here", origin: nil)
-        let bagOfWords2: Set = ["there", "is", "nothing", "to", "remove", "here"]
-        
-        let corpus = [CorpusEntry(textualData: textualData1, bagOfWords: bagOfWords1), CorpusEntry(textualData: textualData2, bagOfWords: bagOfWords2)]
-        let processedCorpus = matchingEngine.remove(stopwords: stopwords, from: corpus)
-        
-        for corpusEntry in processedCorpus {
-            let intersection = corpusEntry.bagOfWords.intersection(stopwords)
-            XCTAssert(intersection.isEmpty, "After stopword removal the bag of words for a corpus entry must not contain a stopword")
-            XCTAssert(corpusEntry.bagOfWords.count <= 6, "After stopwoprd removal the count of bag of words must be equal or lower than before")
-        }
-    }
-    
 }
