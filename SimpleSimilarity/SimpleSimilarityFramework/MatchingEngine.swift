@@ -17,7 +17,7 @@ public struct InvalidArgumentValueError: Error {}
 /// The result for a given query
 public struct Result {
     public let textualResult: TextualData
-    public let quality: UInt
+    public let quality: Float
 }
 
 /// A processed entry in the corpus
@@ -67,21 +67,16 @@ open class MatchingEngine {
 
             // stem words
             corpus.forEach({ (textualData) in
-
-                var bagOfWords: Set<String> = Set()
-                var tokenRanges: NSArray?
-
-                stemmer.string = textualData.inputString
-                let stemmedWords = stemmer.tags(in: NSRange(location: 0, length: textualData.inputString.utf16.count), unit: .word, scheme: .lemma, options: [.omitWhitespace, .omitOther, .omitPunctuation], tokenRanges: &tokenRanges)
-
-                stemmedWords.forEach({ (tag) in
-                    bagOfWords.insert(tag.rawValue)
-                    self.allWords.add(tag.rawValue)
-                })
+                
+                let bagOfWords = self.preprocess(string: textualData.inputString, stemmer: stemmer)
                 
                 let newEntry = CorpusEntry(textualData: textualData, bagOfWords: bagOfWords)
 
                 processedCorpus.insert(newEntry)
+                
+                for word in bagOfWords {
+                    self.allWords.add(word)
+                }
             })
             
             // determine frequent and infrequent words
@@ -144,6 +139,22 @@ open class MatchingEngine {
 
         return stringsToRemove
     }
+    
+    // TODO: This methpd begs for a unit test
+    fileprivate func preprocess(string: String, stemmer: NSLinguisticTagger = NSLinguisticTagger(tagSchemes: [.lemma], options: 0)) -> Set<String> {
+
+        var bagOfWords: Set<String> = Set()
+        var tokenRanges: NSArray?
+        
+        stemmer.string = string
+        let stemmedWords = stemmer.tags(in: NSRange(location: 0, length: string.utf16.count), unit: .word, scheme: .lemma, options: [.omitWhitespace, .omitOther, .omitPunctuation], tokenRanges: &tokenRanges)
+        
+        stemmedWords.forEach({ (tag) in
+            bagOfWords.insert(tag.rawValue)
+        })
+        
+        return bagOfWords
+    }
 
     /// Get the best result for the given query
     ///
@@ -153,7 +164,27 @@ open class MatchingEngine {
     ///   - resultFound: closure that is called once the best result is found
     /// - Throws: a MatchingEngineNotFilledError when bestResult() is called before fillMatchingEngine()
     /// - Precondition: you must first call fillMatchingEngine()
-    open func bestResult(for query: TextualData, exhaustive: Bool, resultFound:() -> Result?) throws {
+    open func bestResult(for query: TextualData, exhaustive: Bool, resultFound:(Result?) -> Void) throws {
+        guard isFilled == true else {
+            throw MatchingEngineNotFilledError()
+        }
+        
+        // TODO: implement exhaustive
+        
+        let queryBagOfWords = preprocess(string: query.inputString)
+        
+        for corpusEntry in corpus {
+            let intersection = corpusEntry.bagOfWords.intersection(queryBagOfWords)
+            
+            let percentage: Float = Float(intersection.count) / Float(queryBagOfWords.count)
+            
+            if percentage > 0.5 {
+                resultFound(Result(textualResult: corpusEntry.textualData, quality: percentage))
+                return
+            }
+        }
+        
+        resultFound(nil)
     }
     
     /// Get's the best results for a given query

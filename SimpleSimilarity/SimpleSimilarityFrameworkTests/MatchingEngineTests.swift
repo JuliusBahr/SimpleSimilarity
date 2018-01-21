@@ -75,4 +75,49 @@ class MatchingEngineTests: XCTestCase {
         XCTAssert(commonWords.isEmpty)
     }
     
+    func testQueryFoundInCorpus() {
+    
+        guard let csvPath = Bundle.main.path(forResource: "sample", ofType: "csv") else {
+            return
+        }
+        
+        var csvImporter = CSVImport()
+        do {
+            try csvImporter.loadFile(at: csvPath)
+        } catch {
+            print("Reading the csv file caused an exception.")
+        }
+        
+        let matchingEngine = MatchingEngine()
+        
+        guard let fileContents = csvImporter.fileContents else {
+            return
+        }
+        
+        let asyncExpectation = expectation(description: "asyncWait")
+        
+        matchingEngine.fillMatchingEngine(with: fileContents) {
+            let yellowTailedTuna = TextualData(inputString: "yellow tailed tuna", origin: nil)
+            
+            try? matchingEngine.bestResult(for: yellowTailedTuna, exhaustive: false, resultFound: { (result) in
+                guard let result = result else {
+                    XCTFail("No result found")
+                    return
+                }
+                
+                XCTAssertTrue(result.textualResult.inputString.contains("yellow"))
+                
+                XCTAssert(result.quality > 0.5)
+                
+                asyncExpectation.fulfill()
+            })
+        }
+        
+        waitForExpectations(timeout: 3)
+    }
+    
+    func testQueryNotFoundInCorpus() {
+        
+    }
+    
 }
