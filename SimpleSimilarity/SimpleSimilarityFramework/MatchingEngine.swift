@@ -140,8 +140,7 @@ open class MatchingEngine {
         return stringsToRemove
     }
     
-    // TODO: This methpd begs for a unit test
-    fileprivate func preprocess(string: String, stemmer: NSLinguisticTagger = NSLinguisticTagger(tagSchemes: [.lemma], options: 0)) -> Set<String> {
+    internal func preprocess(string: String, stemmer: NSLinguisticTagger = NSLinguisticTagger(tagSchemes: [.lemma], options: 0)) -> Set<String> {
 
         var bagOfWords: Set<String> = Set()
         var tokenRanges: NSArray?

@@ -120,4 +120,42 @@ class MatchingEngineTests: XCTestCase {
         
     }
     
+    func testPreprocessStringSentence() {
+        let matchingEngine = MatchingEngine()
+        
+        let preprocessedBagOfWods = matchingEngine.preprocess(string: "The quick brown fox did jump over the fences.")
+        
+        XCTAssertFalse(preprocessedBagOfWods.isEmpty)
+        XCTAssertTrue(preprocessedBagOfWods.contains("do"))
+        XCTAssertTrue(preprocessedBagOfWods.contains("quick"))
+    }
+    
+    func testPreprocessStringConjugations() {
+        let matchingEngine = MatchingEngine()
+        
+        let preprocessedBagOfWods1 = matchingEngine.preprocess(string: "I was going to the bakery.")
+        let preprocessedBagOfWods2 = matchingEngine.preprocess(string: "They are going to the bakery.")
+        let preprocessedBagOfWods3 = matchingEngine.preprocess(string: "We will be going to the bakery.")
+        
+        for bagOfWords in [preprocessedBagOfWods1, preprocessedBagOfWods2, preprocessedBagOfWods3] {
+            XCTAssertFalse(bagOfWords.isEmpty)
+            XCTAssertTrue(bagOfWords.contains("be"))
+            XCTAssertTrue(bagOfWords.contains("go"))
+            XCTAssertTrue(bagOfWords.contains("bakery"))
+        }
+    }
+    
+    func testPreprocessStringPlurals() {
+        let matchingEngine = MatchingEngine()
+        
+        let preprocessedBagOfWods1 = matchingEngine.preprocess(string: "Joshua, let's go see the trains.")
+        let preprocessedBagOfWods2 = matchingEngine.preprocess(string: "Let's do some train spotting.")
+        let preprocessedBagOfWods3 = matchingEngine.preprocess(string: "From which station are trains leaving for Dover?")
+        
+        for bagOfWords in [preprocessedBagOfWods1, preprocessedBagOfWods2, preprocessedBagOfWods3] {
+            XCTAssertFalse(bagOfWords.isEmpty)
+            XCTAssertTrue(bagOfWords.contains("train"))
+        }
+    }
+    
 }
