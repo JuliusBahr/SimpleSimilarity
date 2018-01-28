@@ -149,7 +149,7 @@ open class MatchingEngine {
         let stemmedWords = stemmer.tags(in: NSRange(location: 0, length: string.utf16.count), unit: .word, scheme: .lemma, options: [.omitWhitespace, .omitOther, .omitPunctuation], tokenRanges: &tokenRanges)
         
         stemmedWords.forEach({ (tag) in
-            bagOfWords.insert(tag.rawValue)
+            bagOfWords.insert(tag.rawValue.lowercased())
         })
         
         return bagOfWords
@@ -168,22 +168,32 @@ open class MatchingEngine {
             throw MatchingEngineNotFilledError()
         }
         
-        // TODO: implement exhaustive
-        
         let queryBagOfWords = preprocess(string: query.inputString)
+        
+        var percentageOfBestResult: Float = 0.0
+        var bestMatchInCorpus: CorpusEntry?
         
         for corpusEntry in corpus {
             let intersection = corpusEntry.bagOfWords.intersection(queryBagOfWords)
             
             let percentage: Float = Float(intersection.count) / Float(queryBagOfWords.count)
             
-            if percentage > 0.5 {
+            if percentage > 0.5 && !exhaustive {
                 resultFound(Result(textualResult: corpusEntry.textualData, quality: percentage))
                 return
             }
+            
+            if percentageOfBestResult < percentage {
+                percentageOfBestResult = percentage
+                bestMatchInCorpus = corpusEntry
+            }
         }
         
-        resultFound(nil)
+        if let bestMatchInCorpus = bestMatchInCorpus {
+            resultFound(Result(textualResult: bestMatchInCorpus.textualData, quality: percentageOfBestResult))
+        } else {
+            resultFound(nil)
+        }
     }
     
     /// Get's the best results for a given query
