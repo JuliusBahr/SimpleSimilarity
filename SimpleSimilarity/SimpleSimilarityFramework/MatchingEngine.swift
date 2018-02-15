@@ -47,6 +47,7 @@ open class MatchingEngine {
     /// All words in the corpus with their occurence
     fileprivate var allWords: NSCountedSet = NSCountedSet()
     fileprivate var corpus: Set<CorpusEntry> = Set()
+    fileprivate var stopwords: Set<String> = Set()
 
     public init() {
         
@@ -80,11 +81,11 @@ open class MatchingEngine {
             })
             
             // determine frequent and infrequent words
-            let stopwords = self.determineFrequentAndInfrequentWords(in: self.allWords)
+            self.stopwords = self.determineFrequentAndInfrequentWords(in: self.allWords)
             
             // remove infrequent and frequent words
             processedCorpus.forEach({ (corpusEntry) in
-                corpusEntry.bagOfWords = corpusEntry.bagOfWords.subtracting(stopwords)
+                corpusEntry.bagOfWords = corpusEntry.bagOfWords.subtracting(self.stopwords)
             })
             
             self.isFilled = true
@@ -168,7 +169,8 @@ open class MatchingEngine {
             throw MatchingEngineNotFilledError()
         }
         
-        let queryBagOfWords = preprocess(string: query.inputString)
+        var queryBagOfWords = preprocess(string: query.inputString)
+        queryBagOfWords = queryBagOfWords.subtracting(stopwords)
         
         var percentageOfBestResult: Float = 0.0
         var bestMatchInCorpus: CorpusEntry?
