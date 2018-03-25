@@ -16,7 +16,7 @@ public struct InvalidArgumentValueError: Error {}
 
 /// The result for a given query
 public struct Result {
-    public let textualResult: TextualData
+    public let textualResults: [TextualData]
     public let quality: Float
 }
 
@@ -191,7 +191,18 @@ open class MatchingEngine {
             let percentage: Float = Float(intersection.count) / Float(queryBagOfWords.count)
             
             if percentage > 0.5 && !exhaustive {
-                resultFound(Result(textualResult: corpusEntry.textualData, quality: percentage))
+                guard let originatingStrings = StringsForBagsOfWords.strings(for: corpusEntry.bagOfWords), !originatingStrings.isEmpty else {
+                    assert(false, "Unexpected state: If we find a match in the matching engine we also need to find original strings for a bag of words of a corpus entry")
+                    
+                    resultFound(nil)
+                    return
+                }
+                
+                let textualResults = originatingStrings.map({ (corpusEntry) -> TextualData in
+                    return corpusEntry.textualData
+                })
+                
+                resultFound(Result(textualResults: textualResults, quality: percentage))
                 return
             }
             
@@ -202,7 +213,18 @@ open class MatchingEngine {
         }
         
         if let bestMatchInCorpus = bestMatchInCorpus {
-            resultFound(Result(textualResult: bestMatchInCorpus.textualData, quality: percentageOfBestResult))
+            guard let originatingStrings = StringsForBagsOfWords.strings(for: bestMatchInCorpus.bagOfWords), !originatingStrings.isEmpty else {
+                assert(false, "Unexpected state: If we find a match in the matching engine we also need to find original strings for a bag of words of a corpus entry")
+                
+                resultFound(nil)
+                return
+            }
+            
+            let textualResults = originatingStrings.map({ (corpusEntry) -> TextualData in
+                return corpusEntry.textualData
+            })
+            
+            resultFound(Result(textualResults: textualResults, quality: percentageOfBestResult))
         } else {
             resultFound(nil)
         }

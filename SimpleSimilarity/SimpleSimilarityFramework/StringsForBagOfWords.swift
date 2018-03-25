@@ -8,14 +8,19 @@
 
 import Foundation
 
-struct StringsForBagsOfWords {
+/// Mapping of bag of words to the originating string that resulted in the same bag of words
+internal struct StringsForBagsOfWords {
     static private var stringsForBagOfWords: [Set<String>:[CorpusEntry]] = [:]
     
-    static func strings(for bagOfWords: Set<String>) -> [CorpusEntry]? {
+    /// All corpus entries that share the same bag of words
+    internal static func strings(for bagOfWords: Set<String>) -> [CorpusEntry]? {
         return stringsForBagOfWords[bagOfWords]
     }
-    
-    static func add(corpusEntry: CorpusEntry) {
+
+    /// Adds a corpus entry
+    ///
+    /// - Parameter corpusEntry: the corpus entry to add
+    internal static func add(corpusEntry: CorpusEntry) {
         let existingEntryForBagOfWords = stringsForBagOfWords[corpusEntry.bagOfWords]
         
         if var localExistingEntryForBagOfWords = existingEntryForBagOfWords {

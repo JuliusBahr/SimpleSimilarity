@@ -105,7 +105,7 @@ class MatchingEngineTests: XCTestCase {
                     return
                 }
                 
-                XCTAssertTrue(result.textualResult.inputString.contains("yellow"))
+                XCTAssertTrue(result.textualResults.first!.inputString.contains("yellow"))
                 
                 XCTAssert(result.quality > 0.2)
                 
@@ -146,9 +146,9 @@ class MatchingEngineTests: XCTestCase {
                     return
                 }
                 
-                XCTAssertTrue(result.textualResult.inputString.contains("Yellow"))
-                XCTAssertTrue(result.textualResult.inputString.contains("tail"))
-                XCTAssertTrue(result.textualResult.inputString.contains("sashimi"))
+                XCTAssertTrue(result.textualResults.first!.inputString.contains("Yellow"))
+                XCTAssertTrue(result.textualResults.first!.inputString.contains("tail"))
+                XCTAssertTrue(result.textualResults.first!.inputString.contains("sashimi"))
                 
                 XCTAssert(result.quality > 0.80)
                 
