@@ -8,15 +8,21 @@
 
 import Foundation
 
-struct StringForBagsOfWords {
-    static private let stringsForBagOfWords: [Set<String>:[String]] = [:]
+struct StringsForBagsOfWords {
+    static private var stringsForBagOfWords: [Set<String>:[CorpusEntry]] = [:]
     
-    static func strings(for bagOfWords: Set<String>) -> [String] {
-        return [""]
+    static func strings(for bagOfWords: Set<String>) -> [CorpusEntry]? {
+        return stringsForBagOfWords[bagOfWords]
     }
     
     static func add(corpusEntry: CorpusEntry) {
+        let existingEntryForBagOfWords = stringsForBagOfWords[corpusEntry.bagOfWords]
         
-        
+        if var localExistingEntryForBagOfWords = existingEntryForBagOfWords {
+            localExistingEntryForBagOfWords.append(corpusEntry)
+            stringsForBagOfWords[corpusEntry.bagOfWords] = localExistingEntryForBagOfWords
+        } else {
+            stringsForBagOfWords[corpusEntry.bagOfWords] = [corpusEntry]
+        }
     }
 }

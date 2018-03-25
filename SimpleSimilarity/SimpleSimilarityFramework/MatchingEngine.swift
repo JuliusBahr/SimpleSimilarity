@@ -63,6 +63,7 @@ open class MatchingEngine {
     open func fillMatchingEngine(with corpus:[TextualData], completion: @escaping () -> Void) {
         DispatchQueue.global().async {
             var processedCorpus: Set<CorpusEntry> = Set()
+            var allPreprocessedEntries: Array<CorpusEntry> = Array()
 
             let stemmer = NSLinguisticTagger(tagSchemes: [.lemma], options: 0)
 
@@ -73,6 +74,7 @@ open class MatchingEngine {
                 
                 let newEntry = CorpusEntry(textualData: textualData, bagOfWords: bagOfWords)
 
+                allPreprocessedEntries.append(newEntry)
                 processedCorpus.insert(newEntry)
                 
                 for word in bagOfWords {
@@ -86,6 +88,14 @@ open class MatchingEngine {
             // remove infrequent and frequent words
             processedCorpus.forEach({ (corpusEntry) in
                 corpusEntry.bagOfWords = corpusEntry.bagOfWords.subtracting(self.stopwords)
+            })
+            
+            // create a mapping of a bag of words to the strings that generate the same bag of words
+            allPreprocessedEntries.forEach({ (corpusEntry) in
+                // unfortunately we need to remove the stopwords again here
+                corpusEntry.bagOfWords = corpusEntry.bagOfWords.subtracting(self.stopwords)
+
+                StringsForBagsOfWords.add(corpusEntry: corpusEntry)
             })
             
             self.isFilled = true
