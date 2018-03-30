@@ -48,6 +48,7 @@ open class MatchingEngine {
     fileprivate var allWords: NSCountedSet = NSCountedSet()
     fileprivate var corpus: Set<CorpusEntry> = Set()
     fileprivate var stopwords: Set<String> = Set()
+    fileprivate var stringsForBagsOfWords = StringsForBagsOfWords()
 
     public init() {
         
@@ -95,7 +96,7 @@ open class MatchingEngine {
                 // unfortunately we need to remove the stopwords again here
                 corpusEntry.bagOfWords = corpusEntry.bagOfWords.subtracting(self.stopwords)
 
-                StringsForBagsOfWords.add(corpusEntry: corpusEntry)
+                self.stringsForBagsOfWords.add(corpusEntry: corpusEntry)
             })
             
             self.isFilled = true
@@ -191,7 +192,7 @@ open class MatchingEngine {
             let percentage: Float = Float(intersection.count) / Float(queryBagOfWords.count)
             
             if percentage > 0.5 && !exhaustive {
-                guard let originatingStrings = StringsForBagsOfWords.strings(for: corpusEntry.bagOfWords), !originatingStrings.isEmpty else {
+                guard let originatingStrings = stringsForBagsOfWords.strings(for: corpusEntry.bagOfWords), !originatingStrings.isEmpty else {
                     assert(false, "Unexpected state: If we find a match in the matching engine we also need to find original strings for a bag of words of a corpus entry")
                     
                     resultFound(nil)
@@ -213,7 +214,7 @@ open class MatchingEngine {
         }
         
         if let bestMatchInCorpus = bestMatchInCorpus {
-            guard let originatingStrings = StringsForBagsOfWords.strings(for: bestMatchInCorpus.bagOfWords), !originatingStrings.isEmpty else {
+            guard let originatingStrings = stringsForBagsOfWords.strings(for: bestMatchInCorpus.bagOfWords), !originatingStrings.isEmpty else {
                 assert(false, "Unexpected state: If we find a match in the matching engine we also need to find original strings for a bag of words of a corpus entry")
                 
                 resultFound(nil)
