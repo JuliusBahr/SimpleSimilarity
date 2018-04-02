@@ -161,6 +161,74 @@ class MatchingEngineTests: XCTestCase {
     
     func testQueryNotFoundInCorpus() {
         
+        guard let csvPath = Bundle.main.path(forResource: "sample", ofType: "csv") else {
+            return
+        }
+        
+        var csvImporter = CSVImport()
+        do {
+            try csvImporter.loadFile(at: csvPath)
+        } catch {
+            print("Reading the csv file caused an exception.")
+        }
+        
+        let matchingEngine = MatchingEngine()
+        
+        guard let fileContents = csvImporter.fileContents else {
+            return
+        }
+        
+        let asyncExpectation = expectation(description: "asyncWait")
+        
+        matchingEngine.fillMatchingEngine(with: fileContents) {
+            let noMatchQuery = TextualData(inputString: "Zwei Zwerge stehen an der Kueche", origin: nil)
+            
+            try? matchingEngine.bestResult(for: noMatchQuery, exhaustive: true, resultFound: { (result) in
+                XCTAssertNil(result, "Result found where no result was expected")
+                asyncExpectation.fulfill()
+            })
+        }
+        
+        waitForExpectations(timeout: 3)
+    }
+    
+    func testListOfResultsForQuery() {
+        
+        guard let csvPath = Bundle.main.path(forResource: "sample", ofType: "csv") else {
+            return
+        }
+        
+        var csvImporter = CSVImport()
+        do {
+            try csvImporter.loadFile(at: csvPath)
+        } catch {
+            print("Reading the csv file caused an exception.")
+        }
+        
+        let matchingEngine = MatchingEngine()
+        
+        guard let fileContents = csvImporter.fileContents else {
+            return
+        }
+        
+        let asyncExpectation = expectation(description: "asyncWait")
+        
+        matchingEngine.fillMatchingEngine(with: fileContents) {
+            let queryWithResultList = TextualData(inputString: "Is tuna a good fish for cooking?", origin: nil)
+            
+            try? matchingEngine.result(betterThan: 0.1, for: queryWithResultList, resultsFound: { (results) in
+                XCTAssertNotNil(results)
+                
+                guard let inputString = results!.first?.textualResults.first?.inputString else {
+                    XCTFail("No result found")
+                    return
+                }
+                
+                asyncExpectation.fulfill()
+            })
+        }
+        
+        waitForExpectations(timeout: 3)
     }
     
     func testPreprocessStringSentence() {

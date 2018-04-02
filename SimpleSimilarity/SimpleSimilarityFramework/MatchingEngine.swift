@@ -161,7 +161,10 @@ open class MatchingEngine {
         let stemmedWords = stemmer.tags(in: NSRange(location: 0, length: string.utf16.count), unit: .word, scheme: .lemma, options: [.omitWhitespace, .omitOther, .omitPunctuation], tokenRanges: &tokenRanges)
         
         stemmedWords.forEach({ (tag) in
-            bagOfWords.insert(tag.rawValue.lowercased())
+            let preprocessedWord = tag.rawValue.lowercased()
+            if !preprocessedWord.isEmpty {
+                bagOfWords.insert(preprocessedWord)
+            }
         })
         
         return bagOfWords
@@ -239,8 +242,42 @@ open class MatchingEngine {
     ///   - resultsFound: closure called when the matches with a quality higher than betterThan are found
     /// - Throws: a MatchingEngineNotFilledError when bestResult() is called before fillMatchingEngine(), a InvalidArgumentValueError when betterThan has an illegal value
     /// - Precondition: you must first call fillMatchingEngine()
-    open func result(betterThan: Float, for query: String, resultsFound:() -> [Result]?) throws {
+    open func result(betterThan: Float, for query: TextualData, resultsFound:([Result]?) -> Void) throws {
+        guard isFilled == true else {
+            throw MatchingEngineNotFilledError()
+        }
         
+        var queryBagOfWords = preprocess(string: query.inputString)
+        queryBagOfWords = queryBagOfWords.subtracting(stopwords)
+        
+        var matchesInCorpus: [Result] = []
+        
+        for corpusEntry in corpus {
+            let intersection = corpusEntry.bagOfWords.intersection(queryBagOfWords)
+            
+            let percentage: Float = Float(intersection.count) / Float(queryBagOfWords.count)
+            
+            if percentage >= betterThan {
+                guard let originatingStrings = stringsForBagsOfWords.strings(for: corpusEntry.bagOfWords), !originatingStrings.isEmpty else {
+                    assert(false, "Unexpected state: If we find a match in the matching engine we also need to find original strings for a bag of words of a corpus entry")
+                    
+                    resultsFound(nil)
+                    return
+                }
+                
+                let textualResults = originatingStrings.map({ (corpusEntry) -> TextualData in
+                    return corpusEntry.textualData
+                })
+                
+                matchesInCorpus.append(Result(textualResults: textualResults, quality: percentage))
+            }
+        }
+        
+        if matchesInCorpus.isEmpty {
+            resultsFound(nil)
+        } else {
+            resultsFound(matchesInCorpus)
+        }
     }
 
 }
