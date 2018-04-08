@@ -219,10 +219,21 @@ class MatchingEngineTests: XCTestCase {
             try? matchingEngine.result(betterThan: 0.1, for: queryWithResultList, resultsFound: { (results) in
                 XCTAssertNotNil(results)
                 
-                guard let inputString = results!.first?.textualResults.first?.inputString else {
+                guard let inputString = results?.first?.textualResults.first?.inputString else {
                     XCTFail("No result found")
                     return
                 }
+                
+                XCTAssertTrue(inputString == queryWithResultList.inputString)
+                
+                // Let's check if we have 2 test results
+                guard let firstResult = results?.first, let secondResult = results?[1] else {
+                    asyncExpectation.fulfill()
+
+                    return
+                }
+                
+                XCTAssertTrue(firstResult.quality >= secondResult.quality)
                 
                 asyncExpectation.fulfill()
             })

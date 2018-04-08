@@ -279,6 +279,13 @@ open class MatchingEngine {
         if matchesInCorpus.isEmpty {
             resultsFound(nil)
         } else {
+            matchesInCorpus.sort { (first, second) -> Bool in
+                if first.quality >= second.quality {
+                    return true
+                } else {
+                    return false
+                }
+            }
             resultsFound(matchesInCorpus)
         }
     }
