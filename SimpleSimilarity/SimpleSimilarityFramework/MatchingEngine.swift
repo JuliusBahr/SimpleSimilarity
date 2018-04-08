@@ -87,11 +87,13 @@ open class MatchingEngine {
             // determine frequent and infrequent words
             self.stopwords = self.determineFrequentAndInfrequentWords(in: self.allWords)
             
+            // TODO: dispatch on another thread
             // remove infrequent and frequent words
             processedCorpus.forEach({ (corpusEntry) in
                 corpusEntry.bagOfWords = corpusEntry.bagOfWords.subtracting(self.stopwords)
             })
             
+            // TODO: dispatch on another thread
             // create a mapping of a bag of words to the strings that generate the same bag of words
             allPreprocessedEntries.forEach({ [weak self] (corpusEntry) in
                 if let strongSelf = self {
@@ -101,6 +103,8 @@ open class MatchingEngine {
                     strongSelf.stringsForBagsOfWords.add(corpusEntry: corpusEntry)
                 }
             })
+            
+            // TODO: wait till the 2 dispatch queues finished executing
             
             self.isFilled = true
             self.corpus = processedCorpus
@@ -137,9 +141,9 @@ open class MatchingEngine {
         medianCount = sortedStringCounts[midIndex]
 
         // the top 5% of words are considered frequent
-        let cutOffTop = Int(floor(Double(maxCount) * 0.95))
-        // the bottom 5% of words are considered infrequent
-        let cutOffBottom = Int(floor(Double(maxCount) * 0.05))
+        let cutOffTop = Int(floor(Double(maxCount) * 0.9))
+        // the bottom XX% of words are considered infrequent
+        let cutOffBottom = Int(floor(Double(minCount) * 2.0))
 
         set.objectEnumerator().allObjects.forEach { (string) in
             guard string is String else {
