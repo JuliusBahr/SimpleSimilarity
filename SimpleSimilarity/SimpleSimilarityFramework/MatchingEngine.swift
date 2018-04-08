@@ -69,17 +69,18 @@ open class MatchingEngine {
             let stemmer = NSLinguisticTagger(tagSchemes: [.lemma], options: 0)
 
             // stem words
-            corpus.forEach({ (textualData) in
-                
-                let bagOfWords = self.preprocess(string: textualData.inputString, stemmer: stemmer)
-                
-                let newEntry = CorpusEntry(textualData: textualData, bagOfWords: bagOfWords)
-
-                allPreprocessedEntries.append(newEntry)
-                processedCorpus.insert(newEntry)
-                
-                for word in bagOfWords {
-                    self.allWords.add(word)
+            corpus.forEach({ [weak self] (textualData) in
+                if let strongSelf = self {
+                    let bagOfWords = strongSelf.preprocess(string: textualData.inputString, stemmer: stemmer)
+                    
+                    let newEntry = CorpusEntry(textualData: textualData, bagOfWords: bagOfWords)
+                    
+                    allPreprocessedEntries.append(newEntry)
+                    processedCorpus.insert(newEntry)
+                    
+                    for word in bagOfWords {
+                        strongSelf.allWords.add(word)
+                    }
                 }
             })
             
@@ -92,11 +93,13 @@ open class MatchingEngine {
             })
             
             // create a mapping of a bag of words to the strings that generate the same bag of words
-            allPreprocessedEntries.forEach({ (corpusEntry) in
-                // unfortunately we need to remove the stopwords again here
-                corpusEntry.bagOfWords = corpusEntry.bagOfWords.subtracting(self.stopwords)
-
-                self.stringsForBagsOfWords.add(corpusEntry: corpusEntry)
+            allPreprocessedEntries.forEach({ [weak self] (corpusEntry) in
+                if let strongSelf = self {
+                    // unfortunately we need to remove the stopwords again here
+                    corpusEntry.bagOfWords = corpusEntry.bagOfWords.subtracting(strongSelf.stopwords)
+                    
+                    strongSelf.stringsForBagsOfWords.add(corpusEntry: corpusEntry)
+                }
             })
             
             self.isFilled = true
