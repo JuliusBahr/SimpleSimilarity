@@ -100,3 +100,55 @@ public struct CSVImport: TextualDataImport {
     }
 
 }
+
+public struct NewspaperCorpusImport: TextualDataImport {
+    public init() {
+        
+    }
+    
+    fileprivate var newspaperContents: [TextualData]?
+    
+    public var fileContents: [TextualData]? {
+        get {
+            return newspaperContents
+        }
+    }
+    
+    public mutating func loadFile(at fileName: String) throws {
+        if FileManager.default.fileExists(atPath: fileName) {
+            
+            let fileContents = try? String(contentsOfFile: fileName)
+            var parsedFileContents:[TextualData] = []
+            
+            if let fileContents = fileContents {
+                let lines = fileContents.split(separator: "\n")
+                lines.forEach({ (line) in
+                    let columns = line.split(separator: "|")
+                    if columns.count > 1 {
+                        let columnsCount = columns.count
+                        
+                        if columnsCount > 4  {
+                            parsedFileContents.append(TextualData(inputString: String(columns[4]), origin: String(columns[3])))
+                        }
+                        if columnsCount > 5 {
+                            parsedFileContents.append(TextualData(inputString: String(columns[5]), origin: String(columns[3])))
+                        }
+                        if columnsCount > 6 {
+                            parsedFileContents.append(TextualData(inputString: String(columns[6]), origin: String(columns[3])))
+                        }
+                    }
+                })
+            }
+            
+            guard !parsedFileContents.isEmpty else {
+                throw FileReadError()
+            }
+            
+            newspaperContents = parsedFileContents
+            
+        } else {
+            throw FileReadError()
+        }
+    }
+    
+}
