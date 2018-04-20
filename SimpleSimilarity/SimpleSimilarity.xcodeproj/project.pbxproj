@@ -27,6 +27,7 @@
 		953552E7203AB7000084EF5A /* StringsForBagOfWords.swift in Sources */ = {isa = PBXBuildFile; fileRef = 953552E6203AB7000084EF5A /* StringsForBagOfWords.swift */; };
 		9552E8871F6E98F1001CA2BF /* MatchingEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9552E8861F6E98F1001CA2BF /* MatchingEngine.swift */; };
 		957B63EF1F9C91AA0048C5FE /* MatchingEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 957B63EE1F9C91AA0048C5FE /* MatchingEngineTests.swift */; };
+		95DB6D0A2089E8930066A4CF /* MatchingEngineAlgorithm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95DB6D092089E8930066A4CF /* MatchingEngineAlgorithm.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -109,6 +110,7 @@
 		953552E6203AB7000084EF5A /* StringsForBagOfWords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringsForBagOfWords.swift; sourceTree = "<group>"; };
 		9552E8861F6E98F1001CA2BF /* MatchingEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingEngine.swift; sourceTree = "<group>"; };
 		957B63EE1F9C91AA0048C5FE /* MatchingEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingEngineTests.swift; sourceTree = "<group>"; };
+		95DB6D092089E8930066A4CF /* MatchingEngineAlgorithm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingEngineAlgorithm.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -216,6 +218,7 @@
 				950EF2D11F49EA2C00174155 /* Info.plist */,
 				950EF2EC1F49EAF100174155 /* TextualDataImport.swift */,
 				9552E8861F6E98F1001CA2BF /* MatchingEngine.swift */,
+				95DB6D092089E8930066A4CF /* MatchingEngineAlgorithm.swift */,
 				953552E6203AB7000084EF5A /* StringsForBagOfWords.swift */,
 			);
 			path = SimpleSimilarityFramework;
@@ -474,6 +477,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				95DB6D0A2089E8930066A4CF /* MatchingEngineAlgorithm.swift in Sources */,
 				953552E7203AB7000084EF5A /* StringsForBagOfWords.swift in Sources */,
 				9552E8871F6E98F1001CA2BF /* MatchingEngine.swift in Sources */,
 				950EF2ED1F49EAF100174155 /* TextualDataImport.swift in Sources */,

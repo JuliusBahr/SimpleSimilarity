@@ -71,7 +71,7 @@ open class MatchingEngine {
             // stem words
             corpus.forEach({ [weak self] (textualData) in
                 if let strongSelf = self {
-                    let bagOfWords = strongSelf.preprocess(string: textualData.inputString, stemmer: stemmer)
+                    let bagOfWords = MatchingEngineAlgortihm.preprocess(string: textualData.inputString, stemmer: stemmer)
                     
                     let newEntry = CorpusEntry(textualData: textualData, bagOfWords: bagOfWords)
                     
@@ -85,7 +85,7 @@ open class MatchingEngine {
             })
             
             // determine frequent and infrequent words
-            self.stopwords = self.determineFrequentAndInfrequentWords(in: self.allWords)
+            self.stopwords = MatchingEngineAlgortihm.determineFrequentAndInfrequentWords(in: self.allWords)
             
             // TODO: dispatch on another thread
             // remove infrequent and frequent words
@@ -113,69 +113,9 @@ open class MatchingEngine {
         }
     }
 
-    func determineFrequentAndInfrequentWords(in set:NSCountedSet) -> Set<String> {
-        var maxCount = 0
-        var minCount = Int.max
-        var medianCount = 0
-
-        var stringsToRemove: Set<String> = []
-
-        var stringCounts: [Int] = []
-
-        set.objectEnumerator().allObjects.forEach { (string) in
-            let stringCount = set.count(for: string)
-            if stringCount > maxCount {
-                maxCount = stringCount
-            }
-            if stringCount < minCount {
-                minCount = stringCount
-            }
-            stringCounts.append(stringCount)
-        }
-
-        let sortedStringCounts = stringCounts.sorted()
-
-        let stringCount = Double(sortedStringCounts.count)
-
-        let midIndex = Int(floor(stringCount/2.0))
-        medianCount = sortedStringCounts[midIndex]
-
-        // the top 5% of words are considered frequent
-        let cutOffTop = Int(floor(Double(maxCount) * 0.9))
-        // the bottom XX% of words are considered infrequent
-        let cutOffBottom = Int(floor(Double(minCount) * 2.0))
-
-        set.objectEnumerator().allObjects.forEach { (string) in
-            guard string is String else {
-                return
-            }
-
-            let stringCount = set.count(for: string)
-            if stringCount > cutOffTop || stringCount < cutOffBottom {
-                stringsToRemove.insert(string as! String)
-            }
-        }
-
-        return stringsToRemove
-    }
+  
     
-    internal func preprocess(string: String, stemmer: NSLinguisticTagger = NSLinguisticTagger(tagSchemes: [.lemma], options: 0)) -> Set<String> {
 
-        var bagOfWords: Set<String> = Set()
-        var tokenRanges: NSArray?
-        
-        stemmer.string = string
-        let stemmedWords = stemmer.tags(in: NSRange(location: 0, length: string.utf16.count), unit: .word, scheme: .lemma, options: [.omitWhitespace, .omitOther, .omitPunctuation], tokenRanges: &tokenRanges)
-        
-        stemmedWords.forEach({ (tag) in
-            let preprocessedWord = tag.rawValue.lowercased()
-            if !preprocessedWord.isEmpty {
-                bagOfWords.insert(preprocessedWord)
-            }
-        })
-        
-        return bagOfWords
-    }
 
     /// Get the best result for the given query
     ///
@@ -190,7 +130,7 @@ open class MatchingEngine {
             throw MatchingEngineNotFilledError()
         }
         
-        var queryBagOfWords = preprocess(string: query.inputString)
+        var queryBagOfWords = MatchingEngineAlgortihm.preprocess(string: query.inputString)
         queryBagOfWords = queryBagOfWords.subtracting(stopwords)
         
         var percentageOfBestResult: Float = 0.0
@@ -254,7 +194,7 @@ open class MatchingEngine {
             throw MatchingEngineNotFilledError()
         }
         
-        var queryBagOfWords = preprocess(string: query.inputString)
+        var queryBagOfWords = MatchingEngineAlgortihm.preprocess(string: query.inputString)
         queryBagOfWords = queryBagOfWords.subtracting(stopwords)
         
         var matchesInCorpus: [Result] = []

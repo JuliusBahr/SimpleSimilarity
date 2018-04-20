@@ -40,7 +40,6 @@ class MatchingEngineTests: XCTestCase {
     }
 
     func testDetermineFrequentAndInfrequentWordsRegularCase() {
-        let matchingEngine = MatchingEngine()
 
         let bagOfWords = NSCountedSet()
 
@@ -50,7 +49,7 @@ class MatchingEngineTests: XCTestCase {
             }
         }
 
-        let commonWords = matchingEngine.determineFrequentAndInfrequentWords(in: bagOfWords)
+        let commonWords = MatchingEngineAlgortihm.determineFrequentAndInfrequentWords(in: bagOfWords)
         XCTAssert(!commonWords.contains("30"))
         XCTAssert(!commonWords.contains("60"))
         XCTAssert(commonWords.contains("3"))
@@ -59,7 +58,6 @@ class MatchingEngineTests: XCTestCase {
     }
 
     func disabledTestDetermineFrequentAndInfrequentWordsEvenlyDistributed() {
-        let matchingEngine = MatchingEngine()
 
         let bagOfWords = NSCountedSet()
 
@@ -71,7 +69,7 @@ class MatchingEngineTests: XCTestCase {
             }
         }
 
-        let commonWords = matchingEngine.determineFrequentAndInfrequentWords(in: bagOfWords)
+        let commonWords = MatchingEngineAlgortihm.determineFrequentAndInfrequentWords(in: bagOfWords)
         XCTAssert(commonWords.isEmpty)
     }
     
@@ -243,9 +241,8 @@ class MatchingEngineTests: XCTestCase {
     }
     
     func testPreprocessStringSentence() {
-        let matchingEngine = MatchingEngine()
         
-        let preprocessedBagOfWods = matchingEngine.preprocess(string: "The quick brown fox did jump over the fences.")
+        let preprocessedBagOfWods = MatchingEngineAlgortihm.preprocess(string: "The quick brown fox did jump over the fences.")
         
         XCTAssertFalse(preprocessedBagOfWods.isEmpty)
         XCTAssertTrue(preprocessedBagOfWods.contains("do"))
@@ -253,11 +250,10 @@ class MatchingEngineTests: XCTestCase {
     }
     
     func testPreprocessStringConjugations() {
-        let matchingEngine = MatchingEngine()
         
-        let preprocessedBagOfWods1 = matchingEngine.preprocess(string: "I was going to the bakery.")
-        let preprocessedBagOfWods2 = matchingEngine.preprocess(string: "They are going to the bakery.")
-        let preprocessedBagOfWods3 = matchingEngine.preprocess(string: "We will be going to the bakery.")
+        let preprocessedBagOfWods1 = MatchingEngineAlgortihm.preprocess(string: "I was going to the bakery.")
+        let preprocessedBagOfWods2 = MatchingEngineAlgortihm.preprocess(string: "They are going to the bakery.")
+        let preprocessedBagOfWods3 = MatchingEngineAlgortihm.preprocess(string: "We will be going to the bakery.")
         
         for bagOfWords in [preprocessedBagOfWods1, preprocessedBagOfWods2, preprocessedBagOfWods3] {
             XCTAssertFalse(bagOfWords.isEmpty)
@@ -268,11 +264,10 @@ class MatchingEngineTests: XCTestCase {
     }
     
     func testPreprocessStringPlurals() {
-        let matchingEngine = MatchingEngine()
         
-        let preprocessedBagOfWods1 = matchingEngine.preprocess(string: "Joshua, let's go see the trains.")
-        let preprocessedBagOfWods2 = matchingEngine.preprocess(string: "Let's do some train spotting.")
-        let preprocessedBagOfWods3 = matchingEngine.preprocess(string: "From which station are trains leaving for Dover?")
+        let preprocessedBagOfWods1 = MatchingEngineAlgortihm.preprocess(string: "Joshua, let's go see the trains.")
+        let preprocessedBagOfWods2 = MatchingEngineAlgortihm.preprocess(string: "Let's do some train spotting.")
+        let preprocessedBagOfWods3 = MatchingEngineAlgortihm.preprocess(string: "From which station are trains leaving for Dover?")
         
         for bagOfWords in [preprocessedBagOfWods1, preprocessedBagOfWods2, preprocessedBagOfWods3] {
             XCTAssertFalse(bagOfWords.isEmpty)
