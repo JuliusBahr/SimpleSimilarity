@@ -74,9 +74,9 @@ class MatchingEngineLargeCorpusTests: XCTestCase {
         let asyncExpectation = expectation(description: "asyncWait")
         
         matchingEngine.fillMatchingEngine(with: fileContents) {
-            let yellowTailedTuna = TextualData(inputString: "Das ist die wichtigste Lektion für Amerika aus dem Jahr 2002", origin: nil)
+            let expectedBestMatch = TextualData(inputString: "Das ist die wichtigste Lektion für Amerika aus dem Jahr 2002", origin: nil)
             
-            try? matchingEngine.bestResult(for: yellowTailedTuna, exhaustive: true, resultFound: { (result) in
+            try? matchingEngine.bestResult(for: expectedBestMatch, exhaustive: true, resultFound: { (result) in
                 guard let result = result else {
                     XCTFail("No result found")
                     return
