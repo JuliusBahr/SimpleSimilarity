@@ -57,7 +57,6 @@ internal struct MatchingEngineAlgortihm {
     }
     
     internal static func preprocess(string: String, stemmer: NSLinguisticTagger = NSLinguisticTagger(tagSchemes: [.lemma], options: 0)) -> Set<String> {
-        
         var bagOfWords: Set<String> = Set()
         var tokenRanges: NSArray?
         
@@ -72,6 +71,25 @@ internal struct MatchingEngineAlgortihm {
         })
         
         return bagOfWords
+    }
+    
+    
+    /// Removes the stopwords from the given bag of words
+    ///
+    /// - Parameters:
+    ///   - stopwords: the stopwords to remove
+    ///   - bagOfWords: the bag of words
+    /// - Returns: the bag of words without stopwords
+    /// - Note: It may seem counterintuitive at first. It is much faster to check if a word is a stopword and to remove it. The reason for this is that the set of stopwords is much larger then the given bag of words.
+    internal static func remove(stopwords: Set<String>, from bagOfWords:Set<String>) -> Set<String> {
+        var bagOfWordsWithoutStopwords = Set<String>()
+        for word in bagOfWords {
+            if !stopwords.contains(word) {
+                bagOfWordsWithoutStopwords.insert(word)
+            }
+        }
+        
+        return bagOfWordsWithoutStopwords
     }
     
 }

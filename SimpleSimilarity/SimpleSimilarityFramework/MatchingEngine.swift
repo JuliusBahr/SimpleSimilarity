@@ -86,22 +86,21 @@ open class MatchingEngine {
             
             // determine frequent and infrequent words
             self.stopwords = MatchingEngineAlgortihm.determineFrequentAndInfrequentWords(in: self.allWords)
+            let localStopwords = self.stopwords
             
             // TODO: dispatch on another thread
             // remove infrequent and frequent words
             processedCorpus.forEach({ (corpusEntry) in
-                corpusEntry.bagOfWords = corpusEntry.bagOfWords.subtracting(self.stopwords)
+                corpusEntry.bagOfWords = MatchingEngineAlgortihm.remove(stopwords: localStopwords, from: corpusEntry.bagOfWords)
             })
             
             // TODO: dispatch on another thread
             // create a mapping of a bag of words to the strings that generate the same bag of words
             allPreprocessedEntries.forEach({ [weak self] (corpusEntry) in
-                if let strongSelf = self {
-                    // unfortunately we need to remove the stopwords again here
-                    corpusEntry.bagOfWords = corpusEntry.bagOfWords.subtracting(strongSelf.stopwords)
-                    
-                    strongSelf.stringsForBagsOfWords.add(corpusEntry: corpusEntry)
-                }
+                // unfortunately we need to remove the stopwords again here
+                corpusEntry.bagOfWords = MatchingEngineAlgortihm.remove(stopwords: localStopwords, from: corpusEntry.bagOfWords)
+                
+                self?.stringsForBagsOfWords.add(corpusEntry: corpusEntry)
             })
             
             // TODO: wait till the 2 dispatch queues finished executing
