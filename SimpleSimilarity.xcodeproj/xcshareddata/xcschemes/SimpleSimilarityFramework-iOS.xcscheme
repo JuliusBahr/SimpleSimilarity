@@ -15,36 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "950EF2CD1F49EA2C00174155"
-               BuildableName = "SimpleSimilarityFramework.framework"
-               BlueprintName = "SimpleSimilarityFramework"
-               ReferencedContainer = "container:SimpleSimilarity.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "950EF2951F49E9B400174155"
-               BuildableName = "SimpleSimilarity.app"
-               BlueprintName = "SimpleSimilarity"
-               ReferencedContainer = "container:SimpleSimilarity.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "NO"
-            buildForRunning = "NO"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "950EF2B61F49E9B400174155"
-               BuildableName = "SimpleSimilarityUITests.xctest"
-               BlueprintName = "SimpleSimilarityUITests"
+               BuildableName = "SimpleSimilarityFramework_iOS.framework"
+               BlueprintName = "SimpleSimilarityFramework iOS"
                ReferencedContainer = "container:SimpleSimilarity.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -61,8 +33,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "950EF2CD1F49EA2C00174155"
-            BuildableName = "SimpleSimilarityFramework.framework"
-            BlueprintName = "SimpleSimilarityFramework"
+            BuildableName = "SimpleSimilarityFramework_iOS.framework"
+            BlueprintName = "SimpleSimilarityFramework iOS"
             ReferencedContainer = "container:SimpleSimilarity.xcodeproj">
          </BuildableReference>
       </CodeCoverageTargets>
@@ -88,15 +60,6 @@
             </BuildableReference>
          </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "950EF2951F49E9B400174155"
-            BuildableName = "SimpleSimilarity.app"
-            BlueprintName = "SimpleSimilarity"
-            ReferencedContainer = "container:SimpleSimilarity.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -110,15 +73,6 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "950EF2951F49E9B400174155"
-            BuildableName = "SimpleSimilarity.app"
-            BlueprintName = "SimpleSimilarity"
-            ReferencedContainer = "container:SimpleSimilarity.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -132,8 +86,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "950EF2CD1F49EA2C00174155"
-            BuildableName = "SimpleSimilarityFramework.framework"
-            BlueprintName = "SimpleSimilarityFramework"
+            BuildableName = "SimpleSimilarityFramework_iOS.framework"
+            BlueprintName = "SimpleSimilarityFramework iOS"
             ReferencedContainer = "container:SimpleSimilarity.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
