@@ -61,6 +61,12 @@ open class MatchingEngine {
         return []
     }
 
+    
+    /// Fill the matching engine with textual data
+    ///
+    /// - Parameters:
+    ///   - corpus: the text corpus that is the backing store of the matching engine
+    ///   - completion: completion block called when the matching engine is filled
     open func fillMatchingEngine(with corpus:[TextualData], completion: @escaping () -> Void) {
         isFilled = false
         
