@@ -63,21 +63,18 @@ internal struct MatchingEngineAlgortihm {
         var bagOfWords: Set<String> = Set()
         var tokenRanges: NSArray?
         
-        var localString = string
-        
-        // TODO: This is only working for latin scripts and also a bit ugly
-        // It is necessary to duplicate the short string because the lemmatization only works on strings with at least 2 words
-        if !localString.contains(" ") {
-            localString = "\(localString) \(localString)"
-        }
-        
-        stemmer.string = localString
-        let stemmedWords = stemmer.tags(in: NSRange(location: 0, length: localString.utf16.count), unit: .word, scheme: .lemma, options: [.omitWhitespace, .omitOther, .omitPunctuation], tokenRanges: &tokenRanges)
+        stemmer.string = string
+        let stemmedWords = stemmer.tags(in: NSRange(location: 0, length: string.utf16.count), unit: .word, scheme: .lemma, options: [.omitWhitespace, .omitOther, .omitPunctuation], tokenRanges: &tokenRanges)
         
         stemmedWords.forEach({ (tag) in
             let preprocessedWord = tag.rawValue.lowercased()
             if !preprocessedWord.isEmpty {
                 bagOfWords.insert(preprocessedWord)
+            } else {
+                // if the string cannot be lemmatized add the original value, this only works for latin scripts
+                if !string.contains(" ") {
+                    bagOfWords.insert(string.lowercased())
+                }
             }
         })
         
