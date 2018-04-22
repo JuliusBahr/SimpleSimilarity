@@ -10,7 +10,7 @@ import Foundation
 
 internal struct MatchingEngineAlgortihm {
     
-    internal static func determineFrequentAndInfrequentWords(in set:NSCountedSet) -> Set<String> {
+    internal static func determineFrequentAndInfrequentWords(in set:NSCountedSet, onlyFrequent: Bool) -> Set<String> {
         var maxCount = 0
         var minCount = Int.max
         var medianCount = 0
@@ -48,7 +48,10 @@ internal struct MatchingEngineAlgortihm {
             }
             
             let stringCount = set.count(for: string)
-            if stringCount > cutOffTop || stringCount < cutOffBottom {
+            if stringCount > cutOffTop {
+                stringsToRemove.insert(string as! String)
+            }
+            if !onlyFrequent && (stringCount < cutOffBottom) {
                 stringsToRemove.insert(string as! String)
             }
         }
@@ -72,7 +75,6 @@ internal struct MatchingEngineAlgortihm {
         
         return bagOfWords
     }
-    
     
     /// Removes the stopwords from the given bag of words
     ///
