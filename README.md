@@ -45,6 +45,9 @@ So as you can see the API is really simple and easy to use.
 ## Performance
 Creating a text corpus with 15000 entries takes around 20 seconds on an iPhone 6S.
 
+## Integration into your app
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+
 ## Limitations
 - The framework targets iOS at the moment but could be easily extended to run on mac OS
 - SimpleSimilarity works best with Latin scripts at the moment. It would be great to get some feedback on the efficiency with i.e. Asian languages or Arabic.
