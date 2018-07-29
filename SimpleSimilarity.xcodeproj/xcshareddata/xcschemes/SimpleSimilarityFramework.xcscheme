@@ -20,6 +20,20 @@
                ReferencedContainer = "container:SimpleSimilarity.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "NO"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "950EF2AB1F49E9B400174155"
+               BuildableName = "SimpleSimilarityTests.xctest"
+               BlueprintName = "SimpleSimilarityTests"
+               ReferencedContainer = "container:SimpleSimilarity.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -46,16 +60,6 @@
                BlueprintIdentifier = "950EF2D51F49EA2C00174155"
                BuildableName = "SimpleSimilarityFrameworkTests.xctest"
                BlueprintName = "SimpleSimilarityFrameworkTests"
-               ReferencedContainer = "container:SimpleSimilarity.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "950EF2AB1F49E9B400174155"
-               BuildableName = "SimpleSimilarityTests.xctest"
-               BlueprintName = "SimpleSimilarityTests"
                ReferencedContainer = "container:SimpleSimilarity.xcodeproj">
             </BuildableReference>
          </TestableReference>

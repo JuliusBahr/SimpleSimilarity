@@ -9,8 +9,39 @@
 import Foundation
 
 class ArrayOfIndices {
-    init(uniueValues: Set<AnyHashable>) {
+    
+    private var featureVectors: [[Int]] = Array()
+    
+    private let uniqueValuesArray: Array<AnyHashable>
+    
+    required init(uniqueValues: Set<AnyHashable>) {
+        uniqueValuesArray = Array(uniqueValues)
+    }
+    
+    // TODO: Add support for sets
+    func add(featureVector: [AnyHashable]) throws {
+        // convert the feature vector to an array. We want this so that our feature vectors in the ArrayOfIndices have values at indices that are constantly growing: featureVector[i+1] > featureVector[i]
         
+        var vectorOfIndices: [Int] = Array()
+        
+        try featureVector.forEach { (item) in
+            guard let firstMatch = uniqueValuesArray.firstIndex(of: item) else {
+                throw InvalidArgumentValueError()
+            }
+            
+            vectorOfIndices.append(firstMatch)
+        }
+        
+        featureVectors.append(vectorOfIndices)
+    }
+    
+    // TODO: Implement
+    func add(featureVectors: [[AnyHashable]]) {
+        
+    }
+    
+    private init() {
+        uniqueValuesArray = []
     }
 
 }
