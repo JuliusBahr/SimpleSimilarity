@@ -1,5 +1,5 @@
 //
-//  ArrayOfIndices.swift
+//  IndexMatrix.swift
 //  SimpleSimilarityFramework
 //
 //  Created by Julius Bahr on 29.07.18.
@@ -8,9 +8,10 @@
 
 import Foundation
 
-class ArrayOfIndices {
+class IndexMatrix {
     
-    private var featureVectors: [[Int]] = Array()
+    // only readable for testing
+    private(set) var featureVectors: [[Int]] = Array()
     
     private let uniqueValuesArray: Array<AnyHashable>
     
@@ -18,9 +19,8 @@ class ArrayOfIndices {
         uniqueValuesArray = Array(uniqueValues)
     }
     
-    // TODO: Add support for sets
     func add(featureVector: [AnyHashable]) throws {
-        // convert the feature vector to an array. We want this so that our feature vectors in the ArrayOfIndices have values at indices that are constantly growing: featureVector[i+1] > featureVector[i]
+        // convert the feature vector to an array. We want this so that our feature vectors in the IndexMatrix have values at indices that are constantly growing: featureVector[i+1] > featureVector[i]
         
         var vectorOfIndices: [Int] = Array()
         
@@ -32,7 +32,12 @@ class ArrayOfIndices {
             vectorOfIndices.append(firstMatch)
         }
         
-        featureVectors.append(vectorOfIndices)
+        featureVectors.append(vectorOfIndices.sorted())
+    }
+    
+    func add(featureVector: Set<AnyHashable>) throws {
+        let array = Array(featureVector)
+        try add(featureVector: array)
     }
     
     // TODO: Implement
