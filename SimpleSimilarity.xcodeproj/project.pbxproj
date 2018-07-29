@@ -24,6 +24,7 @@
 		95118C8E207A68A200E732F3 /* MatchingEngineLargeCorpusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95118C8D207A68A200E732F3 /* MatchingEngineLargeCorpusTests.swift */; };
 		95118C92207A715500E732F3 /* newspaper.csv in Resources */ = {isa = PBXBuildFile; fileRef = 95118C91207A715400E732F3 /* newspaper.csv */; };
 		957B63EF1F9C91AA0048C5FE /* MatchingEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 957B63EE1F9C91AA0048C5FE /* MatchingEngineTests.swift */; };
+		957C4EAC210DB3B800285D3E /* ArrayOfIndices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 957C4EAB210DB3B800285D3E /* ArrayOfIndices.swift */; };
 		958C68A1208CA3F900D31527 /* TextualDataImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950EF2EC1F49EAF100174155 /* TextualDataImport.swift */; };
 		958C68A2208CA3FD00D31527 /* MatchingEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9552E8861F6E98F1001CA2BF /* MatchingEngine.swift */; };
 		958C68A3208CA40000D31527 /* MatchingEngineAlgorithm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95DB6D092089E8930066A4CF /* MatchingEngineAlgorithm.swift */; };
@@ -51,13 +52,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 950EF2CD1F49EA2C00174155;
 			remoteInfo = SimpleSimilarityFramework;
-		};
-		950EF2DA1F49EA2C00174155 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 950EF28E1F49E9B300174155 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 950EF2951F49E9B400174155;
-			remoteInfo = SimpleSimilarity;
 		};
 		950EF2E11F49EA2C00174155 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -110,6 +104,7 @@
 		953552E6203AB7000084EF5A /* StringsForBagOfWords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringsForBagOfWords.swift; sourceTree = "<group>"; };
 		9552E8861F6E98F1001CA2BF /* MatchingEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingEngine.swift; sourceTree = "<group>"; };
 		957B63EE1F9C91AA0048C5FE /* MatchingEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingEngineTests.swift; sourceTree = "<group>"; };
+		957C4EAB210DB3B800285D3E /* ArrayOfIndices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayOfIndices.swift; sourceTree = "<group>"; };
 		95DB6D092089E8930066A4CF /* MatchingEngineAlgorithm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingEngineAlgorithm.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -219,6 +214,7 @@
 				950EF2EC1F49EAF100174155 /* TextualDataImport.swift */,
 				9552E8861F6E98F1001CA2BF /* MatchingEngine.swift */,
 				95DB6D092089E8930066A4CF /* MatchingEngineAlgorithm.swift */,
+				957C4EAB210DB3B800285D3E /* ArrayOfIndices.swift */,
 				953552E6203AB7000084EF5A /* StringsForBagOfWords.swift */,
 			);
 			path = SimpleSimilarityFramework;
@@ -343,7 +339,6 @@
 			);
 			dependencies = (
 				950EF2D91F49EA2C00174155 /* PBXTargetDependency */,
-				950EF2DB1F49EA2C00174155 /* PBXTargetDependency */,
 			);
 			name = SimpleSimilarityFrameworkTests;
 			productName = SimpleSimilarityFrameworkTests;
@@ -477,6 +472,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				957C4EAC210DB3B800285D3E /* ArrayOfIndices.swift in Sources */,
 				958C68A4208CA40400D31527 /* StringsForBagOfWords.swift in Sources */,
 				958C68A3208CA40000D31527 /* MatchingEngineAlgorithm.swift in Sources */,
 				958C68A2208CA3FD00D31527 /* MatchingEngine.swift in Sources */,
@@ -511,11 +507,6 @@
 			isa = PBXTargetDependency;
 			target = 950EF2CD1F49EA2C00174155 /* SimpleSimilarityFramework */;
 			targetProxy = 950EF2D81F49EA2C00174155 /* PBXContainerItemProxy */;
-		};
-		950EF2DB1F49EA2C00174155 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 950EF2951F49E9B400174155 /* SimpleSimilarity */;
-			targetProxy = 950EF2DA1F49EA2C00174155 /* PBXContainerItemProxy */;
 		};
 		950EF2E21F49EA2C00174155 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
