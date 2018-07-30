@@ -8,10 +8,13 @@
 
 import Foundation
 
+
 class IndexMatrix {
+
+
     
     // only readable for testing
-    private(set) var featureVectors: [[Int]] = Array()
+    private(set) var featureVectors: [Set<Int>] = Array()
     
     private let uniqueValuesArray: Array<AnyHashable>
     
@@ -22,17 +25,17 @@ class IndexMatrix {
     func add(featureVector: [AnyHashable]) throws {
         // convert the feature vector to an array. We want this so that our feature vectors in the IndexMatrix have values at indices that are constantly growing: featureVector[i+1] > featureVector[i]
         
-        var vectorOfIndices: [Int] = Array()
+        var indexSet: Set<Int> = Set()
         
         try featureVector.forEach { (item) in
             guard let firstMatch = uniqueValuesArray.firstIndex(of: item) else {
                 throw InvalidArgumentValueError()
             }
             
-            vectorOfIndices.append(firstMatch)
+            indexSet.insert(firstMatch)
         }
         
-        featureVectors.append(vectorOfIndices.sorted())
+        featureVectors.append(indexSet)
     }
     
     func add(featureVector: Set<AnyHashable>) throws {
