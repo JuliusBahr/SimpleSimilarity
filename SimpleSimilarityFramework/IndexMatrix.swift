@@ -11,7 +11,6 @@ import Foundation
 /// A matrix with a column of unique values and feature vectors containing the indicies when a match to the column of values occurs
 class IndexMatrix {
 
-
     /// A single feature vector
     struct FeatureVector {
         /// Hashable objects that can be added to an IndexMatrix
@@ -20,7 +19,7 @@ class IndexMatrix {
         /// A back pointer to the original object that maps to these features
         weak var objectOrigin: AnyObject?
 
-        fileprivate var indexSet: Set<Int>?
+        fileprivate var indexSet: Set<Int>? // TODO: move to native IndexSet
 
         init(origin: AnyObject? = nil, features: Set<AnyHashable>) {
             self.objectOrigin = origin

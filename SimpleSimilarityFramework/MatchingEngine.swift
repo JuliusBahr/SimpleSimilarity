@@ -46,7 +46,7 @@ open class MatchingEngine {
 
     /// All words in the corpus with their occurence
     fileprivate var allWords: NSCountedSet = NSCountedSet()
-    fileprivate var corpus: Set<CorpusEntry> = Set()
+    fileprivate var corpus: IndexMatrix?
     fileprivate var stopwords: Set<String> = Set()
     fileprivate var stringsForBagsOfWords = StringsForBagsOfWords()
 
@@ -125,12 +125,26 @@ open class MatchingEngine {
 
             // wait till the 2 dispatch queues finished executing
             dispatchGroup.wait()
-            
+
+            self.corpus = self.convertCorpusToIndexSet(corpus: processedCorpus, allStrings: self.allWords, stopwords: self.stopwords)
             self.isFilled = true
-            self.corpus = processedCorpus
 
             completion()
         }
+    }
+
+    private func convertCorpusToIndexSet(corpus: Set<CorpusEntry>, allStrings: NSCountedSet, stopwords: Set<String>) -> IndexMatrix {
+        let swiftAllStrings: Set<String> = allStrings as! Set<String>
+
+        let uniqueWords: Set<String> = swiftAllStrings.subtracting(stopwords)
+        let indexMatrix = IndexMatrix(uniqueValues: uniqueWords)
+
+        for corpusEntry in corpus {
+            let featureVector = IndexMatrix.FeatureVector(origin: corpusEntry, features: corpusEntry.bagOfWords)
+            (try? indexMatrix.add(featureVector: featureVector)) ?? assert(false, "Unexpectedly the feature vector could not be added")
+        }
+
+        return indexMatrix
     }
 
     /// Get the best result for the given query
