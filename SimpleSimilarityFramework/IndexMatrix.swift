@@ -37,20 +37,24 @@ class IndexMatrix {
     // only readable for testing
     private(set) var featureVectors: [FeatureVector] = Array()
     
-    private let uniqueValuesArray: Array<AnyHashable>
+    private var uniqueValuesDict: Dictionary<AnyHashable, Int> = Dictionary()
 
 
     /// Set up with the unique values
     ///
     /// - Parameter uniqueValues: the unique values set
     required init(uniqueValues: Set<AnyHashable>) {
-        uniqueValuesArray = Array(uniqueValues)
+        uniqueValuesDict = Dictionary(minimumCapacity: uniqueValues.count)
+
+        var i: Int = 0
+        uniqueValues.forEach { (hashable) in
+            uniqueValuesDict[hashable] = i
+            i += 1
+        }
     }
 
     private init() {
-        uniqueValuesArray = []
     }
-
 
     /// Add a feature vector to the index matrix
     ///
@@ -61,11 +65,11 @@ class IndexMatrix {
         var featureVectorCopy = featureVector
         
         try featureVectorCopy.features.forEach { (item) in
-            guard let firstMatch = uniqueValuesArray.firstIndex(of: item) else {
+            guard let match = uniqueValuesDict[item] else {
                 throw InvalidArgumentValueError()
             }
             
-            indexSet.insert(firstMatch)
+            indexSet.insert(match)
         }
 
         featureVectorCopy.indexSet = indexSet

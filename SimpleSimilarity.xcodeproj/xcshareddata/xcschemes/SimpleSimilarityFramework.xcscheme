@@ -104,15 +104,16 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "950EF2CD1F49EA2C00174155"
-            BuildableName = "SimpleSimilarityFramework.framework"
-            BlueprintName = "SimpleSimilarityFramework"
+            BlueprintIdentifier = "950EF2951F49E9B400174155"
+            BuildableName = "SimpleSimilarity.app"
+            BlueprintName = "SimpleSimilarity"
             ReferencedContainer = "container:SimpleSimilarity.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
