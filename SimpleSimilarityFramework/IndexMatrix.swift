@@ -27,6 +27,13 @@ class IndexMatrix {
         }
     }
 
+    struct SearchResult {
+        let matchingFeatureVector: FeatureVector
+
+        /// The score for this search result. The value is between 0.0 and 1.0
+        let score: Float32
+    }
+
     // only readable for testing
     private(set) var featureVectors: [FeatureVector] = Array()
     
@@ -71,7 +78,7 @@ class IndexMatrix {
         
     }
 
-    func bestResult(for query: FeatureVector, resultFound:(FeatureVector?) -> Void) {
+    func bestResult(for query: FeatureVector, resultFound:(SearchResult?) -> Void) {
         var bestMatchScore: Float32 = 0.0
         var bestMatch: FeatureVector? = nil
         let queryCount = query.features.count
@@ -81,17 +88,21 @@ class IndexMatrix {
 
             let score: Float32 = Float32(intersectionCount)/Float32(queryCount)
             if score > 0.99 {
-                resultFound(featureVector)
+                resultFound(SearchResult(matchingFeatureVector: featureVector, score: score))
                 return
             }
 
-            if score >= bestMatchScore {
+            if score > bestMatchScore {
                 bestMatchScore = score
                 bestMatch = featureVector
             }
         }
 
-        resultFound(bestMatch)
+        if let bestMatch = bestMatch {
+            resultFound(SearchResult(matchingFeatureVector: bestMatch, score: bestMatchScore))
+        } else {
+            resultFound(nil)
+        }
     }
 
 }
