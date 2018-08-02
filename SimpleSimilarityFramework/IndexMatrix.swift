@@ -27,10 +27,13 @@ class IndexMatrix {
         }
     }
 
+
+    /// A search result from the index matrix
     struct SearchResult {
+        /// The found feature vector
         let matchingFeatureVector: FeatureVector
 
-        /// The score for this search result. The value is between 0.0 and 1.0
+        /// The score for this search result. The value is between 0.0 and 1.0.
         let score: Float32
     }
 
@@ -38,7 +41,6 @@ class IndexMatrix {
     private(set) var featureVectors: [FeatureVector] = Array()
     
     private var uniqueValuesDict: Dictionary<AnyHashable, Int> = Dictionary()
-
 
     /// Set up with the unique values
     ///
@@ -69,7 +71,7 @@ class IndexMatrix {
                 throw InvalidArgumentValueError()
             }
             
-            indexSet.insert(match)
+            indexSet.insert(match) // TODO: a map could be faster here
         }
 
         featureVectorCopy.indexSet = indexSet
@@ -82,16 +84,23 @@ class IndexMatrix {
         
     }
 
+    /// Returns the best result found in the index matrix
+    ///
+    /// - Parameters:
+    ///   - query: the query to search for
+    ///   - resultFound: called when a result has been found
+    /// - Note: If a very good result is found this result is returned and the search is stopped.
     func bestResult(for query: FeatureVector, resultFound:(SearchResult?) -> Void) {
-        var bestMatchScore: Float32 = 0.0
         var bestMatch: FeatureVector? = nil
+        var bestMatchScore: Float32 = 0.0
         let queryCount = query.features.count
 
+        // TODO: This screams for parallel execution
         for featureVector in featureVectors {
             let intersectionCount = query.features.intersection(featureVector.features).count
 
             let score: Float32 = Float32(intersectionCount)/Float32(queryCount)
-            if score > 0.99 {
+            if score > 0.98 {
                 resultFound(SearchResult(matchingFeatureVector: featureVector, score: score))
                 return
             }

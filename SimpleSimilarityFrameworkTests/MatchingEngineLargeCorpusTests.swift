@@ -110,7 +110,7 @@ class MatchingEngineLargeCorpusTests: XCTestCase {
         waitForExpectations(timeout: 60)
     }
 
-    func testZManySearches() {
+    func testManySearches() {
         let asyncExpectation = expectation(description: "asyncWait")
 
         // get queries
