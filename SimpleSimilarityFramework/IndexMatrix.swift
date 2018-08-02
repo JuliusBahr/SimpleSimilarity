@@ -19,7 +19,7 @@ class IndexMatrix {
         /// A back pointer to the original object that maps to these features
         weak var objectOrigin: AnyObject?
 
-        fileprivate var indexSet: Set<Int>? // TODO: move to native IndexSet
+        fileprivate var indexSet: IndexSet?
 
         init(origin: AnyObject? = nil, features: Set<AnyHashable>) {
             self.objectOrigin = origin
@@ -61,7 +61,7 @@ class IndexMatrix {
     /// - Parameter featureVector: the feature vector to be added
     /// - Throws: an illegal argument exception when the feature vector has values that are not contained in the unique values
     func add(featureVector: FeatureVector) throws {
-        var indexSet: Set<Int> = Set()
+        var indexSet = IndexSet()
         var featureVectorCopy = featureVector
         
         try featureVectorCopy.features.forEach { (item) in
