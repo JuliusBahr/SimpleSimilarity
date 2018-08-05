@@ -148,16 +148,23 @@ class MatchingEngineLargeCorpusTests: XCTestCase {
         MatchingEngineLargeCorpusTests.setupMatchingEngineWithLargeInput() {
 
             queries.forEach({ (query) in
-                try? MatchingEngineLargeCorpusTests.matchingEngine?.results(betterThan: 0.8, for: query, resultsFound: { (results) in
+                print("\n")
+                print("QUERY: \(query.inputString)")
+
+                try? MatchingEngineLargeCorpusTests.matchingEngine?.results(betterThan: 0.3, for: query, resultsFound: { (results) in
                     if query.inputString.count > 3 {
                         XCTAssert((results?.count ?? -1) > 0, "We should find at least one result")
 
                         results?.forEach({ (result) in
-                            XCTAssertNotNil(result, "We should find in the corpus what we previously added:\n query: \(query.inputString)")
-                            XCTAssert(result.quality > 0.78, "Result quality is too low: \(result.quality)")
+                            result.textualResults.forEach({ (textualData) in
+                                print(textualData.inputString)
+                            })
+
+                            XCTAssert(result.quality > 0.28, "Result quality is too low: \(result.quality)")
                         })
                     }
                 })
+                print("\n")
             })
 
             asyncExpectation.fulfill()
