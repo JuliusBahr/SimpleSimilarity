@@ -23,7 +23,9 @@
 		950EF2F91F49FA5000174155 /* sample.csv in Resources */ = {isa = PBXBuildFile; fileRef = 950EF2F81F49FA4800174155 /* sample.csv */; };
 		95118C8E207A68A200E732F3 /* MatchingEngineLargeCorpusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95118C8D207A68A200E732F3 /* MatchingEngineLargeCorpusTests.swift */; };
 		95118C92207A715500E732F3 /* newspaper.csv in Resources */ = {isa = PBXBuildFile; fileRef = 95118C91207A715400E732F3 /* newspaper.csv */; };
+		955525F1210DCC13007DE4B7 /* IndexMatrixTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 955525F0210DCC13007DE4B7 /* IndexMatrixTests.swift */; };
 		957B63EF1F9C91AA0048C5FE /* MatchingEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 957B63EE1F9C91AA0048C5FE /* MatchingEngineTests.swift */; };
+		957C4EAC210DB3B800285D3E /* IndexMatrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 957C4EAB210DB3B800285D3E /* IndexMatrix.swift */; };
 		958C68A1208CA3F900D31527 /* TextualDataImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950EF2EC1F49EAF100174155 /* TextualDataImport.swift */; };
 		958C68A2208CA3FD00D31527 /* MatchingEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9552E8861F6E98F1001CA2BF /* MatchingEngine.swift */; };
 		958C68A3208CA40000D31527 /* MatchingEngineAlgorithm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95DB6D092089E8930066A4CF /* MatchingEngineAlgorithm.swift */; };
@@ -51,13 +53,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 950EF2CD1F49EA2C00174155;
 			remoteInfo = SimpleSimilarityFramework;
-		};
-		950EF2DA1F49EA2C00174155 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 950EF28E1F49E9B300174155 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 950EF2951F49E9B400174155;
-			remoteInfo = SimpleSimilarity;
 		};
 		950EF2E11F49EA2C00174155 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -109,7 +104,9 @@
 		95118C91207A715400E732F3 /* newspaper.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = newspaper.csv; sourceTree = "<group>"; };
 		953552E6203AB7000084EF5A /* StringsForBagOfWords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringsForBagOfWords.swift; sourceTree = "<group>"; };
 		9552E8861F6E98F1001CA2BF /* MatchingEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingEngine.swift; sourceTree = "<group>"; };
+		955525F0210DCC13007DE4B7 /* IndexMatrixTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexMatrixTests.swift; sourceTree = "<group>"; };
 		957B63EE1F9C91AA0048C5FE /* MatchingEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingEngineTests.swift; sourceTree = "<group>"; };
+		957C4EAB210DB3B800285D3E /* IndexMatrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexMatrix.swift; sourceTree = "<group>"; };
 		95DB6D092089E8930066A4CF /* MatchingEngineAlgorithm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingEngineAlgorithm.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -219,6 +216,7 @@
 				950EF2EC1F49EAF100174155 /* TextualDataImport.swift */,
 				9552E8861F6E98F1001CA2BF /* MatchingEngine.swift */,
 				95DB6D092089E8930066A4CF /* MatchingEngineAlgorithm.swift */,
+				957C4EAB210DB3B800285D3E /* IndexMatrix.swift */,
 				953552E6203AB7000084EF5A /* StringsForBagOfWords.swift */,
 			);
 			path = SimpleSimilarityFramework;
@@ -230,6 +228,7 @@
 				950EF2DD1F49EA2C00174155 /* TextualImportTests.swift */,
 				957B63EE1F9C91AA0048C5FE /* MatchingEngineTests.swift */,
 				95118C8D207A68A200E732F3 /* MatchingEngineLargeCorpusTests.swift */,
+				955525F0210DCC13007DE4B7 /* IndexMatrixTests.swift */,
 				950EF2DF1F49EA2C00174155 /* Info.plist */,
 			);
 			path = SimpleSimilarityFrameworkTests;
@@ -343,7 +342,6 @@
 			);
 			dependencies = (
 				950EF2D91F49EA2C00174155 /* PBXTargetDependency */,
-				950EF2DB1F49EA2C00174155 /* PBXTargetDependency */,
 			);
 			name = SimpleSimilarityFrameworkTests;
 			productName = SimpleSimilarityFrameworkTests;
@@ -477,6 +475,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				957C4EAC210DB3B800285D3E /* IndexMatrix.swift in Sources */,
 				958C68A4208CA40400D31527 /* StringsForBagOfWords.swift in Sources */,
 				958C68A3208CA40000D31527 /* MatchingEngineAlgorithm.swift in Sources */,
 				958C68A2208CA3FD00D31527 /* MatchingEngine.swift in Sources */,
@@ -488,6 +487,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				955525F1210DCC13007DE4B7 /* IndexMatrixTests.swift in Sources */,
 				957B63EF1F9C91AA0048C5FE /* MatchingEngineTests.swift in Sources */,
 				95118C8E207A68A200E732F3 /* MatchingEngineLargeCorpusTests.swift in Sources */,
 				950EF2DE1F49EA2C00174155 /* TextualImportTests.swift in Sources */,
@@ -511,11 +511,6 @@
 			isa = PBXTargetDependency;
 			target = 950EF2CD1F49EA2C00174155 /* SimpleSimilarityFramework */;
 			targetProxy = 950EF2D81F49EA2C00174155 /* PBXContainerItemProxy */;
-		};
-		950EF2DB1F49EA2C00174155 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 950EF2951F49E9B400174155 /* SimpleSimilarity */;
-			targetProxy = 950EF2DA1F49EA2C00174155 /* PBXContainerItemProxy */;
 		};
 		950EF2E21F49EA2C00174155 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -593,6 +588,7 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -647,6 +643,7 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;

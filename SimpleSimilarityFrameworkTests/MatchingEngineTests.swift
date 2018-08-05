@@ -73,7 +73,7 @@ class MatchingEngineTests: XCTestCase {
         XCTAssert(commonWords.isEmpty)
     }
     
-    func testQueryFoundInCorpusNotExhaustive() {
+    func testQueryFoundInCorpusOne() {
     
         guard let csvPath = Bundle.main.path(forResource: "sample", ofType: "csv") else {
             return
@@ -97,7 +97,7 @@ class MatchingEngineTests: XCTestCase {
         matchingEngine.fillMatchingEngine(with: fileContents) {
             let yellowTailedTuna = TextualData(inputString: "yellow tuna", origin: nil, originObject: nil)
             
-            try? matchingEngine.bestResult(for: yellowTailedTuna, exhaustive: false, resultFound: { (result) in
+            try? matchingEngine.bestResult(for: yellowTailedTuna, resultFound: { (result) in
                 guard let result = result else {
                     XCTFail("No result found")
                     return
@@ -114,7 +114,7 @@ class MatchingEngineTests: XCTestCase {
         waitForExpectations(timeout: 3)
     }
     
-    func testQueryFoundInCorpusExhaustive() {
+    func testQueryFoundInCorpusTwo() {
         
         guard let csvPath = Bundle.main.path(forResource: "sample", ofType: "csv") else {
             return
@@ -138,7 +138,7 @@ class MatchingEngineTests: XCTestCase {
         matchingEngine.fillMatchingEngine(with: fileContents) {
             let yellowTailedTuna = TextualData(inputString: "Yellow tailed tuna makes for great sashimi", origin: nil, originObject: nil)
             
-            try? matchingEngine.bestResult(for: yellowTailedTuna, exhaustive: true, resultFound: { (result) in
+            try? matchingEngine.bestResult(for: yellowTailedTuna, resultFound: { (result) in
                 guard let result = result else {
                     XCTFail("No result found")
                     return
@@ -181,7 +181,7 @@ class MatchingEngineTests: XCTestCase {
         matchingEngine.fillMatchingEngine(with: fileContents) {
             let noMatchQuery = TextualData(inputString: "Zwei Zwerge stehen an der Kueche", origin: nil, originObject: nil)
             
-            try? matchingEngine.bestResult(for: noMatchQuery, exhaustive: true, resultFound: { (result) in
+            try? matchingEngine.bestResult(for: noMatchQuery, resultFound: { (result) in
                 XCTAssertNil(result, "Result found where no result was expected")
                 asyncExpectation.fulfill()
             })
@@ -214,7 +214,7 @@ class MatchingEngineTests: XCTestCase {
         matchingEngine.fillMatchingEngine(with: fileContents) {
             let queryWithResultList = TextualData(inputString: "Is tuna a good fish for cooking?", origin: nil, originObject: nil)
             
-            try? matchingEngine.result(betterThan: 0.1, for: queryWithResultList, resultsFound: { (results) in
+            try? matchingEngine.results(betterThan: 0.1, for: queryWithResultList, resultsFound: { (results) in
                 XCTAssertNotNil(results)
                 
                 guard let inputString = results?.first?.textualResults.first?.inputString else {
