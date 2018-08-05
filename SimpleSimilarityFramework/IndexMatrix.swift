@@ -8,7 +8,7 @@
 
 import Foundation
 
-/// A matrix with a column of unique values and feature vectors containing the indicies when a match to the column of values occurs
+/// A matrix with a column of unique values and feature vectors containing the indicies when a match to the column of unique values occurs
 class IndexMatrix {
 
     /// A single feature vector
@@ -118,4 +118,28 @@ class IndexMatrix {
         }
     }
 
+    /// Get's the best results for a given query
+    ///
+    /// - Parameters:
+    ///   - betterThan: the threshold for the quality of results. Valid results are within in 0.0 and 1.0.
+    ///   - query: the query object for which the best matchs in the index matrix are retrieved
+    ///   - resultsFound: closure called when the matches with a quality higher than betterThan are found
+    func results(betterThan: Float, for query: FeatureVector, resultsFound:([SearchResult]?) -> Void) {
+
+        var matchesBetterThan: [SearchResult] = Array()
+        let queryCount = query.features.count
+
+        // TODO: This screams for parallel execution
+        for featureVector in featureVectors {
+            let intersectionCount = query.features.intersection(featureVector.features).count
+
+            let score: Float32 = Float32(intersectionCount)/Float32(queryCount)
+
+            if score >= betterThan {
+                matchesBetterThan.append(SearchResult(matchingFeatureVector: featureVector, score: score))
+            }
+        }
+
+        matchesBetterThan.count == 0 ? resultsFound(nil) : resultsFound(matchesBetterThan)
+    }
 }

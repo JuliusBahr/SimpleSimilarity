@@ -45,38 +45,14 @@ class MatchingEngineLargeCorpusTests: XCTestCase {
         self.matchingEngine!.fillMatchingEngine(with: fileContents, completion: completion)
     }
     
-    func testQueryFoundInCorpusNotExhaustive() {
-
-        let asyncExpectation = expectation(description: "asyncWait")
-        
-        MatchingEngineLargeCorpusTests.setupMatchingEngineWithLargeInput() {
-            let yellowTailedTuna = TextualData(inputString: "Der Bundeskanzler reiste nach Algerien", origin: nil, originObject: nil)
-            
-            try? MatchingEngineLargeCorpusTests.matchingEngine?.bestResult(for: yellowTailedTuna, exhaustive: false, resultFound: { (result) in
-                guard let result = result else {
-                    XCTFail("No result found")
-                    return
-                }
-                
-                XCTAssertTrue(result.textualResults.first!.inputString.contains("Bundeskanzler"))
-                
-                XCTAssert(result.quality > 0.2)
-                
-                asyncExpectation.fulfill()
-            })
-        }
-        
-        waitForExpectations(timeout: 120)
-    }
-    
-    func testQueryFoundInCorpusExhaustive() {
+    func testQueryFoundInCorpus() {
 
         let asyncExpectation = expectation(description: "asyncWait")
         
         MatchingEngineLargeCorpusTests.setupMatchingEngineWithLargeInput() {
             let expectedBestMatch = TextualData(inputString: "Das ist die wichtigste Lektion für Amerika aus dem Jahr 2002", origin: nil, originObject: nil)
             
-            try? MatchingEngineLargeCorpusTests.matchingEngine?.bestResult(for: expectedBestMatch, exhaustive: true, resultFound: { (result) in
+            try? MatchingEngineLargeCorpusTests.matchingEngine?.bestResult(for: expectedBestMatch, resultFound: { (result) in
                 guard let result = result else {
                     XCTFail("No result found")
                     return
@@ -101,7 +77,7 @@ class MatchingEngineLargeCorpusTests: XCTestCase {
         MatchingEngineLargeCorpusTests.setupMatchingEngineWithLargeInput() {
             let noMatchQuery = TextualData(inputString: "great sashimi dish", origin: nil, originObject: nil)
             
-            try? MatchingEngineLargeCorpusTests.matchingEngine?.bestResult(for: noMatchQuery, exhaustive: true, resultFound: { (result) in
+            try? MatchingEngineLargeCorpusTests.matchingEngine?.bestResult(for: noMatchQuery, resultFound: { (result) in
                 XCTAssertNil(result, "Result found where no result was expected")
                 asyncExpectation.fulfill()
             })
@@ -110,7 +86,7 @@ class MatchingEngineLargeCorpusTests: XCTestCase {
         waitForExpectations(timeout: 60)
     }
 
-    func testManySearches() {
+    func testZManySearchesBestResults() {
         let asyncExpectation = expectation(description: "asyncWait")
 
         // get queries
@@ -134,7 +110,7 @@ class MatchingEngineLargeCorpusTests: XCTestCase {
         MatchingEngineLargeCorpusTests.setupMatchingEngineWithLargeInput() {
 
             queries.forEach({ (query) in
-                try? MatchingEngineLargeCorpusTests.matchingEngine?.bestResult(for: query, exhaustive: true, resultFound: { (result) in
+                try? MatchingEngineLargeCorpusTests.matchingEngine?.bestResult(for: query, resultFound: { (result) in
                     if query.inputString.count > 3 {
                         XCTAssertNotNil(result, "We should find in the corpus what we previously added:\n query: \(query.inputString)")
                         XCTAssert(result?.quality ?? 0.0 > 0.98, "Result quality is too low: \(result?.quality)")
