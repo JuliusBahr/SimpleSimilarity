@@ -122,7 +122,7 @@ class IndexMatrix {
     ///
     /// - Parameters:
     ///   - betterThan: the threshold for the quality of results. Valid results are within in 0.0 and 1.0.
-    ///   - query: the query object for which the best matchs in the index matrix are retrieved
+    ///   - query: the query object for which the best matches in the index matrix are retrieved
     ///   - resultsFound: closure called when the matches with a quality higher than betterThan are found
     func results(betterThan: Float, for query: FeatureVector, resultsFound:([SearchResult]?) -> Void) {
 

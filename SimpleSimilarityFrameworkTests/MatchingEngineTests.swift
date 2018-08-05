@@ -73,7 +73,7 @@ class MatchingEngineTests: XCTestCase {
         XCTAssert(commonWords.isEmpty)
     }
     
-    func testQueryFoundInCorpusNotExhaustive() {
+    func testQueryFoundInCorpusOne() {
     
         guard let csvPath = Bundle.main.path(forResource: "sample", ofType: "csv") else {
             return
@@ -114,7 +114,7 @@ class MatchingEngineTests: XCTestCase {
         waitForExpectations(timeout: 3)
     }
     
-    func testQueryFoundInCorpusExhaustive() {
+    func testQueryFoundInCorpusTwo() {
         
         guard let csvPath = Bundle.main.path(forResource: "sample", ofType: "csv") else {
             return

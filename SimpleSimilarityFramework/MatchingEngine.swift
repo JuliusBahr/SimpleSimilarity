@@ -126,14 +126,14 @@ open class MatchingEngine {
             // wait till the 2 dispatch queues finished executing
             dispatchGroup.wait()
 
-            self.corpus = self.convertCorpusToIndexSet(corpus: processedCorpus, allStrings: self.allWords, stopwords: self.stopwords)
+            self.corpus = self.convertCorpusToIndexMatrix(corpus: processedCorpus, allStrings: self.allWords, stopwords: self.stopwords)
             self.isFilled = true
 
             completion()
         }
     }
 
-    private func convertCorpusToIndexSet(corpus: Set<CorpusEntry>, allStrings: NSCountedSet, stopwords: Set<String>) -> IndexMatrix {
+    private func convertCorpusToIndexMatrix(corpus: Set<CorpusEntry>, allStrings: NSCountedSet, stopwords: Set<String>) -> IndexMatrix {
         let swiftAllStrings: Set<String> = allStrings as! Set<String>
 
         let uniqueWords: Set<String> = swiftAllStrings.subtracting(stopwords)
