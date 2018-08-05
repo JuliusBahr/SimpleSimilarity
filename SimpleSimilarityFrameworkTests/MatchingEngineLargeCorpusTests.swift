@@ -119,10 +119,52 @@ class MatchingEngineLargeCorpusTests: XCTestCase {
             })
 
             asyncExpectation.fulfill()
-
         }
 
         waitForExpectations(timeout: 60)
     }
+
+    func testZManySearchesResultsBetterThan() {
+        let asyncExpectation = expectation(description: "asyncWait")
+
+        // get queries
+        guard let csvPath = Bundle.main.path(forResource: "newspaper", ofType: "csv") else {
+            return
+        }
+
+        var csvImporter = NewspaperCorpusImport()
+        do {
+            try csvImporter.loadFile(at: csvPath)
+        } catch {
+            print("Reading the csv file caused an exception.")
+        }
+
+        guard let fileContents = csvImporter.fileContents else {
+            return
+        }
+
+        let queries = fileContents[0...100]
+
+        MatchingEngineLargeCorpusTests.setupMatchingEngineWithLargeInput() {
+
+            queries.forEach({ (query) in
+                try? MatchingEngineLargeCorpusTests.matchingEngine?.results(betterThan: 0.8, for: query, resultsFound: { (results) in
+                    if query.inputString.count > 3 {
+                        XCTAssert((results?.count ?? -1) > 0, "We should find at least one result")
+
+                        results?.forEach({ (result) in
+                            XCTAssertNotNil(result, "We should find in the corpus what we previously added:\n query: \(query.inputString)")
+                            XCTAssert(result.quality > 0.78, "Result quality is too low: \(result.quality)")
+                        })
+                    }
+                })
+            })
+
+            asyncExpectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 60)
+    }
+
     
 }
