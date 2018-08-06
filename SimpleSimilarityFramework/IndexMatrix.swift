@@ -129,6 +129,30 @@ class IndexMatrix {
         var matchesBetterThan: [SearchResult] = Array()
         let queryCount = query.features.count
 
+        let operationQueue = OperationQueue()
+        let osThreadCount = OperationQueue.defaultMaxConcurrentOperationCount
+        let threadCount = osThreadCount > 0 ? osThreadCount : 2
+
+        operationQueue.maxConcurrentOperationCount = threadCount
+
+        let sliceCount: Int = Int(Float(featureVectors.count) / Float(threadCount))
+        var ranges:[Range<Int>] = []
+
+        for i in 0..<threadCount {
+            if i == 0 {
+                ranges.append(0..<sliceCount)
+
+                continue
+            }
+            if i == threadCount - 1 {
+                ranges.append(ranges.last!.upperBound+1..<featureVectors.count)
+
+                continue
+            }
+
+            ranges.append(ranges.last!.upperBound+1..<ranges.last!.upperBound+1 + sliceCount)
+        }
+
         // TODO: This screams for parallel execution
         for featureVector in featureVectors {
             let intersectionCount = query.features.intersection(featureVector.features).count
