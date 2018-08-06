@@ -127,11 +127,11 @@ class IndexMatrix {
     func results(betterThan: Float, for query: FeatureVector, resultsFound:([SearchResult]?) -> Void) {
 
         var matchesBetterThan: [SearchResult] = Array()
-        let queryCount = query.features.count
+        let queryWordCount = query.features.count
 
         let operationQueue = OperationQueue()
         let osThreadCount = OperationQueue.defaultMaxConcurrentOperationCount
-        let threadCount = osThreadCount > 0 ? osThreadCount : 2
+        let threadCount = osThreadCount > 1 ? osThreadCount : 4
 
         operationQueue.maxConcurrentOperationCount = threadCount
 
@@ -153,15 +153,37 @@ class IndexMatrix {
             ranges.append(ranges.last!.upperBound+1..<ranges.last!.upperBound+1 + sliceCount)
         }
 
-        // TODO: This screams for parallel execution
-        for featureVector in featureVectors {
-            let intersectionCount = query.features.intersection(featureVector.features).count
+        var parallelExecutionStorage = Dictionary<Int, NSMutableArray>()
 
-            let score: Float32 = Float32(intersectionCount)/Float32(queryCount)
+        for i in 0..<threadCount {
 
-            if score >= betterThan {
-                matchesBetterThan.append(SearchResult(matchingFeatureVector: featureVector, score: score))
+            parallelExecutionStorage[i] = NSMutableArray()
+
+            let arraySlice = featureVectors[ranges[i]]
+
+            let operation = BlockOperation {
+                for featureVector in arraySlice {
+                    let intersectionCount = query.features.intersection(featureVector.features).count
+
+                    let score: Float32 = Float32(intersectionCount)/Float32(queryWordCount)
+
+                    if score >= betterThan {
+                        parallelExecutionStorage[i]!.add(SearchResult(matchingFeatureVector: featureVector, score: score))
+                    }
+                }
             }
+
+            operationQueue.addOperation(operation)
+        }
+
+        operationQueue.waitUntilAllOperationsAreFinished()
+
+        parallelExecutionStorage.values.forEach { (partialResults) in
+            guard let typedArray = partialResults as NSArray as? [SearchResult] else {
+                return
+            }
+
+            matchesBetterThan.append(contentsOf: typedArray)
         }
 
         matchesBetterThan.count == 0 ? resultsFound(nil) : resultsFound(matchesBetterThan)
