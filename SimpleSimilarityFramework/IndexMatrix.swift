@@ -37,15 +37,65 @@ class IndexMatrix {
         let score: Float32
     }
 
+    private struct ParallelExecution {
+        let operationQueue: OperationQueue
+        let threadCount: Int
+        let lock: NSLock
+
+        init() {
+            operationQueue = OperationQueue()
+            let osThreadCount = OperationQueue.defaultMaxConcurrentOperationCount
+            threadCount = osThreadCount > 1 ? osThreadCount : 4
+
+            operationQueue.maxConcurrentOperationCount = threadCount
+            lock = NSLock()
+        }
+    }
+
+    private struct ArrayRanges {
+        let ranges: [Range<Int>]
+
+        init(arrayCount: Int, sliceCount: Int) throws {
+            guard arrayCount > sliceCount else {
+                throw InvalidArgumentValueError()
+            }
+
+            var localRanges:[Range<Int>] = []
+
+            let countOfVectorsWithinSlice = Int(Float32(arrayCount)/Float32(sliceCount))
+
+            for i in 0..<sliceCount {
+                if i == 0 {
+                    localRanges.append(0..<countOfVectorsWithinSlice)
+
+                    continue
+                }
+                if i == sliceCount - 1 {
+                    localRanges.append(localRanges.last!.upperBound+1..<arrayCount)
+
+                    continue
+                }
+
+                localRanges.append(localRanges.last!.upperBound+1..<localRanges.last!.upperBound+1 + countOfVectorsWithinSlice)
+            }
+
+            ranges = localRanges
+        }
+    }
+
     // only readable for testing
     private(set) var featureVectors: [FeatureVector] = Array()
     
     private var uniqueValuesDict: Dictionary<AnyHashable, Int> = Dictionary()
 
+    private let parallelExecution: ParallelExecution
+    private var arrayRanges: ArrayRanges?
+
     /// Set up with the unique values
     ///
     /// - Parameter uniqueValues: the unique values set
     required init(uniqueValues: Set<AnyHashable>) {
+        parallelExecution = ParallelExecution()
         uniqueValuesDict = Dictionary(minimumCapacity: uniqueValues.count)
 
         var i: Int = 0
@@ -56,6 +106,7 @@ class IndexMatrix {
     }
 
     private init() {
+        parallelExecution = ParallelExecution()
     }
 
     /// Add a feature vector to the index matrix
@@ -127,18 +178,36 @@ class IndexMatrix {
     func results(betterThan: Float, for query: FeatureVector, resultsFound:([SearchResult]?) -> Void) {
 
         var matchesBetterThan: [SearchResult] = Array()
-        let queryCount = query.features.count
+        let queryWordCount = query.features.count
 
-        // TODO: This screams for parallel execution
-        for featureVector in featureVectors {
-            let intersectionCount = query.features.intersection(featureVector.features).count
-
-            let score: Float32 = Float32(intersectionCount)/Float32(queryCount)
-
-            if score >= betterThan {
-                matchesBetterThan.append(SearchResult(matchingFeatureVector: featureVector, score: score))
-            }
+        if arrayRanges == nil {
+            arrayRanges = try? ArrayRanges(arrayCount: featureVectors.count, sliceCount: parallelExecution.threadCount)
         }
+
+        for i in 0..<parallelExecution.threadCount {
+
+            let arraySlice = featureVectors[arrayRanges!.ranges[i]] // TODO: Does this copy the array contents?
+
+            let operation = BlockOperation { [weak self] in
+                for featureVector in arraySlice {
+                    let intersectionCount = query.features.intersection(featureVector.features).count
+
+                    let score: Float32 = Float32(intersectionCount)/Float32(queryWordCount)
+
+                    if score >= betterThan {
+                        let searchResult = SearchResult(matchingFeatureVector: featureVector, score: score)
+
+                        self?.parallelExecution.lock.lock()
+                        matchesBetterThan.append(searchResult)
+                        self?.parallelExecution.lock.unlock()
+                    }
+                }
+            }
+
+            parallelExecution.operationQueue.addOperation(operation)
+        }
+
+        parallelExecution.operationQueue.waitUntilAllOperationsAreFinished()
 
         matchesBetterThan.count == 0 ? resultsFound(nil) : resultsFound(matchesBetterThan)
     }
