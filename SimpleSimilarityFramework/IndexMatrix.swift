@@ -37,14 +37,62 @@ class IndexMatrix {
         let score: Float32
     }
 
+    private struct ParallelExecution {
+        let operationQueue: OperationQueue
+        let threadCount: Int
+
+        init() {
+            operationQueue = OperationQueue()
+            let osThreadCount = OperationQueue.defaultMaxConcurrentOperationCount
+            threadCount = osThreadCount > 1 ? osThreadCount : 4
+
+            operationQueue.maxConcurrentOperationCount = threadCount
+        }
+    }
+
+    private struct ArrayRanges {
+        let ranges: [Range<Int>]
+
+        init(arrayCount: Int, sliceCount: Int) throws {
+            guard arrayCount > sliceCount else {
+                throw InvalidArgumentValueError()
+            }
+
+            var localRanges:[Range<Int>] = []
+
+            let countOfVectorsWithinSlice = Int(Float32(arrayCount)/Float32(sliceCount))
+
+            for i in 0..<sliceCount {
+                if i == 0 {
+                    localRanges.append(0..<countOfVectorsWithinSlice)
+
+                    continue
+                }
+                if i == sliceCount - 1 {
+                    localRanges.append(localRanges.last!.upperBound+1..<arrayCount)
+
+                    continue
+                }
+
+                localRanges.append(localRanges.last!.upperBound+1..<localRanges.last!.upperBound+1 + countOfVectorsWithinSlice)
+            }
+
+            ranges = localRanges
+        }
+    }
+
     // only readable for testing
     private(set) var featureVectors: [FeatureVector] = Array()
     
     private var uniqueValuesDict: Dictionary<AnyHashable, Int> = Dictionary()
 
+    lazy private var parallelExecution = ParallelExecution()
+    private var arrayRanges: ArrayRanges?
+
     /// Set up with the unique values
     ///
     /// - Parameter uniqueValues: the unique values set
+    // TODO: Intializer should be changed so that the unique values and all feature vectors are passed in at the same time
     required init(uniqueValues: Set<AnyHashable>) {
         uniqueValuesDict = Dictionary(minimumCapacity: uniqueValues.count)
 
@@ -129,37 +177,17 @@ class IndexMatrix {
         var matchesBetterThan: [SearchResult] = Array()
         let queryWordCount = query.features.count
 
-        let operationQueue = OperationQueue()
-        let osThreadCount = OperationQueue.defaultMaxConcurrentOperationCount
-        let threadCount = osThreadCount > 1 ? osThreadCount : 4
-
-        operationQueue.maxConcurrentOperationCount = threadCount
-
-        let sliceCount: Int = Int(Float(featureVectors.count) / Float(threadCount))
-        var ranges:[Range<Int>] = []
-
-        for i in 0..<threadCount {
-            if i == 0 {
-                ranges.append(0..<sliceCount)
-
-                continue
-            }
-            if i == threadCount - 1 {
-                ranges.append(ranges.last!.upperBound+1..<featureVectors.count)
-
-                continue
-            }
-
-            ranges.append(ranges.last!.upperBound+1..<ranges.last!.upperBound+1 + sliceCount)
-        }
-
         var parallelExecutionStorage = Dictionary<Int, NSMutableArray>()
 
-        for i in 0..<threadCount {
+        if arrayRanges == nil {
+            arrayRanges = try? ArrayRanges(arrayCount: featureVectors.count, sliceCount: parallelExecution.threadCount)
+        }
+
+        for i in 0..<parallelExecution.threadCount {
 
             parallelExecutionStorage[i] = NSMutableArray()
 
-            let arraySlice = featureVectors[ranges[i]]
+            let arraySlice = featureVectors[arrayRanges!.ranges[i]] // TODO: Does this copy the array contents?
 
             let operation = BlockOperation {
                 for featureVector in arraySlice {
@@ -173,10 +201,10 @@ class IndexMatrix {
                 }
             }
 
-            operationQueue.addOperation(operation)
+            parallelExecution.operationQueue.addOperation(operation)
         }
 
-        operationQueue.waitUntilAllOperationsAreFinished()
+        parallelExecution.operationQueue.waitUntilAllOperationsAreFinished()
 
         parallelExecutionStorage.values.forEach { (partialResults) in
             guard let typedArray = partialResults as NSArray as? [SearchResult] else {
