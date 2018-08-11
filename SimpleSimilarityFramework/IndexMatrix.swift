@@ -40,6 +40,7 @@ class IndexMatrix {
     private struct ParallelExecution {
         let operationQueue: OperationQueue
         let threadCount: Int
+        let resultSynchronizationQueue: DispatchQueue
 
         init() {
             operationQueue = OperationQueue()
@@ -47,6 +48,8 @@ class IndexMatrix {
             threadCount = osThreadCount > 1 ? osThreadCount : 4
 
             operationQueue.maxConcurrentOperationCount = threadCount
+
+            resultSynchronizationQueue = DispatchQueue(label: "resultSynchronizationQueue") // we assume to be on the background thread
         }
     }
 
@@ -86,7 +89,7 @@ class IndexMatrix {
     
     private var uniqueValuesDict: Dictionary<AnyHashable, Int> = Dictionary()
 
-    lazy private var parallelExecution = ParallelExecution()
+    private let parallelExecution: ParallelExecution
     private var arrayRanges: ArrayRanges?
 
     /// Set up with the unique values
@@ -94,6 +97,7 @@ class IndexMatrix {
     /// - Parameter uniqueValues: the unique values set
     // TODO: Intializer should be changed so that the unique values and all feature vectors are passed in at the same time
     required init(uniqueValues: Set<AnyHashable>) {
+        parallelExecution = ParallelExecution()
         uniqueValuesDict = Dictionary(minimumCapacity: uniqueValues.count)
 
         var i: Int = 0
@@ -104,6 +108,7 @@ class IndexMatrix {
     }
 
     private init() {
+        parallelExecution = ParallelExecution()
     }
 
     /// Add a feature vector to the index matrix
@@ -177,26 +182,24 @@ class IndexMatrix {
         var matchesBetterThan: [SearchResult] = Array()
         let queryWordCount = query.features.count
 
-        var parallelExecutionStorage = Dictionary<Int, NSMutableArray>()
-
         if arrayRanges == nil {
             arrayRanges = try? ArrayRanges(arrayCount: featureVectors.count, sliceCount: parallelExecution.threadCount)
         }
 
         for i in 0..<parallelExecution.threadCount {
 
-            parallelExecutionStorage[i] = NSMutableArray()
-
             let arraySlice = featureVectors[arrayRanges!.ranges[i]] // TODO: Does this copy the array contents?
 
-            let operation = BlockOperation {
+            let operation = BlockOperation { [weak self] in
                 for featureVector in arraySlice {
                     let intersectionCount = query.features.intersection(featureVector.features).count
 
                     let score: Float32 = Float32(intersectionCount)/Float32(queryWordCount)
 
                     if score >= betterThan {
-                        parallelExecutionStorage[i]!.add(SearchResult(matchingFeatureVector: featureVector, score: score))
+                        self?.parallelExecution.resultSynchronizationQueue.sync {
+                            matchesBetterThan.append(SearchResult(matchingFeatureVector: featureVector, score: score))
+                        }
                     }
                 }
             }
@@ -205,14 +208,6 @@ class IndexMatrix {
         }
 
         parallelExecution.operationQueue.waitUntilAllOperationsAreFinished()
-
-        parallelExecutionStorage.values.forEach { (partialResults) in
-            guard let typedArray = partialResults as NSArray as? [SearchResult] else {
-                return
-            }
-
-            matchesBetterThan.append(contentsOf: typedArray)
-        }
 
         matchesBetterThan.count == 0 ? resultsFound(nil) : resultsFound(matchesBetterThan)
     }
