@@ -40,7 +40,7 @@ class IndexMatrix {
     private struct ParallelExecution {
         let operationQueue: OperationQueue
         let threadCount: Int
-        let resultSynchronizationQueue: DispatchQueue
+        let lock: NSLock
 
         init() {
             operationQueue = OperationQueue()
@@ -48,8 +48,7 @@ class IndexMatrix {
             threadCount = osThreadCount > 1 ? osThreadCount : 4
 
             operationQueue.maxConcurrentOperationCount = threadCount
-
-            resultSynchronizationQueue = DispatchQueue(label: "resultSynchronizationQueue") // we assume to be on the background thread
+            lock = NSLock()
         }
     }
 
@@ -95,7 +94,6 @@ class IndexMatrix {
     /// Set up with the unique values
     ///
     /// - Parameter uniqueValues: the unique values set
-    // TODO: Intializer should be changed so that the unique values and all feature vectors are passed in at the same time
     required init(uniqueValues: Set<AnyHashable>) {
         parallelExecution = ParallelExecution()
         uniqueValuesDict = Dictionary(minimumCapacity: uniqueValues.count)
@@ -197,9 +195,11 @@ class IndexMatrix {
                     let score: Float32 = Float32(intersectionCount)/Float32(queryWordCount)
 
                     if score >= betterThan {
-                        self?.parallelExecution.resultSynchronizationQueue.sync {
-                            matchesBetterThan.append(SearchResult(matchingFeatureVector: featureVector, score: score))
-                        }
+                        let searchResult = SearchResult(matchingFeatureVector: featureVector, score: score)
+
+                        self?.parallelExecution.lock.lock()
+                        matchesBetterThan.append(searchResult)
+                        self?.parallelExecution.lock.unlock()
                     }
                 }
             }
