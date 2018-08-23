@@ -47,20 +47,6 @@
 			remoteGlobalIDString = 950EF2951F49E9B400174155;
 			remoteInfo = SimpleSimilarity;
 		};
-		950EF2D81F49EA2C00174155 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 950EF28E1F49E9B300174155 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 950EF2CD1F49EA2C00174155;
-			remoteInfo = SimpleSimilarityFramework;
-		};
-		950EF2E11F49EA2C00174155 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 950EF28E1F49E9B300174155 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 950EF2CD1F49EA2C00174155;
-			remoteInfo = SimpleSimilarityFramework;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -269,7 +255,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				950EF2E21F49EA2C00174155 /* PBXTargetDependency */,
 			);
 			name = SimpleSimilarity;
 			productName = SimpleSimilarity;
@@ -341,7 +326,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				950EF2D91F49EA2C00174155 /* PBXTargetDependency */,
 			);
 			name = SimpleSimilarityFrameworkTests;
 			productName = SimpleSimilarityFrameworkTests;
@@ -506,16 +490,6 @@
 			isa = PBXTargetDependency;
 			target = 950EF2951F49E9B400174155 /* SimpleSimilarity */;
 			targetProxy = 950EF2B81F49E9B400174155 /* PBXContainerItemProxy */;
-		};
-		950EF2D91F49EA2C00174155 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 950EF2CD1F49EA2C00174155 /* SimpleSimilarityFramework */;
-			targetProxy = 950EF2D81F49EA2C00174155 /* PBXContainerItemProxy */;
-		};
-		950EF2E21F49EA2C00174155 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 950EF2CD1F49EA2C00174155 /* SimpleSimilarityFramework */;
-			targetProxy = 950EF2E11F49EA2C00174155 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

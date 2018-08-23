@@ -45,7 +45,7 @@ class IndexMatrix {
         init() {
             operationQueue = OperationQueue()
             let osThreadCount = OperationQueue.defaultMaxConcurrentOperationCount
-            threadCount = osThreadCount > 1 ? osThreadCount : 4
+            threadCount = osThreadCount > 1 ? osThreadCount : 2
 
             operationQueue.maxConcurrentOperationCount = threadCount
             lock = NSLock()
