@@ -61,6 +61,7 @@ class IndexMatrix {
             }
 
             var localRanges:[Range<Int>] = []
+            localRanges.reserveCapacity(sliceCount)
 
             let countOfVectorsWithinSlice = Int(Float32(arrayCount)/Float32(sliceCount))
 

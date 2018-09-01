@@ -74,6 +74,7 @@ open class MatchingEngine {
         DispatchQueue.global().async {
             var processedCorpus: Set<CorpusEntry> = Set()
             var allPreprocessedEntries: Array<CorpusEntry> = Array()
+            allPreprocessedEntries.reserveCapacity(corpus.count)
 
             let stemmer = NSLinguisticTagger(tagSchemes: [.lemma], options: 0)
 
@@ -213,6 +214,8 @@ open class MatchingEngine {
                 resultsFound(nil)
                 return
             }
+
+            matchesInCorpus.reserveCapacity(searchResults.count)
 
             searchResults.forEach({ (searchResult) in
                 guard let corpusEntry = searchResult.matchingFeatureVector.objectOrigin as? CorpusEntry else {
