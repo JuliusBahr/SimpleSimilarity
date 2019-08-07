@@ -27,14 +27,19 @@ public struct TextualData: Hashable {
         self.inputString = inputString
         self.origin = origin
         self.originObject = originObject
-    }
-    
-    public var hashValue: Int {
+
         if let origin = origin {
-            return origin.appending(inputString).hashValue
+            self.computedHash = origin.appending(inputString).hashValue
         } else {
-            return inputString.hashValue
+            self.computedHash = inputString.hashValue
         }
+    }
+
+    private let computedHash: Int
+
+    // hashInto is too slow
+    public var hashValue: Int {
+        return computedHash
     }
     
     public static func ==(lhs: TextualData, rhs: TextualData) -> Bool {
