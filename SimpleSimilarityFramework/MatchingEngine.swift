@@ -30,7 +30,8 @@ open class CorpusEntry: Hashable {
         self.textualData = textualData
         self.bagOfWords = bagOfWords
     }
-    
+
+    // hashInto is too slow
     public var hashValue: Int {
         return textualData.hashValue
     }
