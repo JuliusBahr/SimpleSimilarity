@@ -113,7 +113,7 @@ class MatchingEngineLargeCorpusTests: XCTestCase {
                 try? MatchingEngineLargeCorpusTests.matchingEngine?.bestResult(for: query, resultFound: { (result) in
                     if query.inputString.count > 3 {
                         XCTAssertNotNil(result, "We should find in the corpus what we previously added:\n query: \(query.inputString)")
-                        XCTAssert(result?.quality ?? 0.0 > 0.98, "Result quality is too low: \(result?.quality)")
+                        XCTAssert(result?.quality ?? 0.0 > 0.98, "Result quality is too low: \(String(describing: result?.quality))")
                     }
                 })
             })

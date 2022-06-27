@@ -47,6 +47,13 @@
 			remoteGlobalIDString = 950EF2951F49E9B400174155;
 			remoteInfo = SimpleSimilarity;
 		};
+		9558D344286A278900810CEE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 950EF28E1F49E9B300174155 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 950EF2CD1F49EA2C00174155;
+			remoteInfo = SimpleSimilarityFramework;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -255,6 +262,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				9558D345286A278900810CEE /* PBXTargetDependency */,
 			);
 			name = SimpleSimilarity;
 			productName = SimpleSimilarity;
@@ -301,9 +309,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 950EF2E51F49EA2C00174155 /* Build configuration list for PBXNativeTarget "SimpleSimilarityFramework" */;
 			buildPhases = (
+				950EF2CB1F49EA2C00174155 /* Headers */,
 				950EF2C91F49EA2C00174155 /* Sources */,
 				950EF2CA1F49EA2C00174155 /* Frameworks */,
-				950EF2CB1F49EA2C00174155 /* Headers */,
 				950EF2CC1F49EA2C00174155 /* Resources */,
 			);
 			buildRules = (
@@ -339,7 +347,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0900;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1340;
 				ORGANIZATIONNAME = "Julius Bahr";
 				TargetAttributes = {
 					950EF2951F49E9B400174155 = {
@@ -493,6 +501,11 @@
 			target = 950EF2951F49E9B400174155 /* SimpleSimilarity */;
 			targetProxy = 950EF2B81F49E9B400174155 /* PBXContainerItemProxy */;
 		};
+		9558D345286A278900810CEE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 950EF2CD1F49EA2C00174155 /* SimpleSimilarityFramework */;
+			targetProxy = 9558D344286A278900810CEE /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -540,6 +553,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -566,13 +580,13 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_PARAMETER = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -601,6 +615,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -621,11 +636,11 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_PARAMETER = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -637,7 +652,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = B8AN6892A4;
 				INFOPLIST_FILE = SimpleSimilarity/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.julius.de.SimpleSimilarity;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -653,7 +668,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = B8AN6892A4;
 				INFOPLIST_FILE = SimpleSimilarity/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.julius.de.SimpleSimilarity;
 				PRODUCT_NAME = "$(TARGET_NAME)";
