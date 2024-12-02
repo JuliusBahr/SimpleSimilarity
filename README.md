@@ -1,6 +1,10 @@
 # SimpleSimilarity
 SimpleSimilarity is an easy to use framework for semantic text search.
 
+##
+I recommend not to use this library anymore in iOS 18. Its features are now available as a system service in Core Spotlight.
+Please check Apple's WWDC 2024 session video ["Support semantic search with Core Spotlight"](https://developer.apple.com/videos/play/wwdc2024/10131/).
+
 ## Features
 - Text corpus creation
 - Textual search
